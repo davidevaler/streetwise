@@ -1,0 +1,46 @@
+body, html {
+  margin: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.navbar {
+  background: #f1f1f1;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.login-btn {
+  border: 1px solid black;
+  background: white;
+  padding: 5px 10px;
+}
+
+.container {
+  display: flex;
+  height: 70%;
+}
+
+.sidebar {
+  width: 20%;
+  border-right: 1px solid black;
+  padding: 10px;
+}
+
+#map {
+  width: 80%;
+  height: 100%;
+  background: green;
+}
+
+.bottom {
+  padding: 10px;
+  background: #fafafa;
+  border-top: 1px solid black;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
