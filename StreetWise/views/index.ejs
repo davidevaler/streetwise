@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Map App</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+  <div class="navbar">navbar <button class="login-btn">login</button></div>
+  <div class="container">
+    <div class="sidebar">
+      <h3>Filtri</h3>
+      <ul>
+        <li>
+          <input type="checkbox" id="filter1" name="filter1">
+          <label for="filter1">Filtro 1</label>
+        </li>
+        <li>
+          <input type="checkbox" id="filter2" name="filter2">
+          <label for="filter2">Filtro 2</label>
+        </li>
+        <li>
+          <input type="checkbox" id="filter3" name="filter3">
+          <label for="filter3">Filtro 3</label>
+        </li>
+      </ul>
+    </div>
+    <div id="map"></div>
+  </div>
+  <div class="bottom">Comunicazioni</div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="/js/map.js"></script>
+</body>
+</html>
