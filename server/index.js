@@ -5,6 +5,9 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 require('dotenv').config();
 
+const routeLogin = require("./routes/routeLogin");
+app.use("/api/auth", routeLogin); 
+
 app.use(cors(
     {
         origin: 'http://localhost:5173'
@@ -21,6 +24,7 @@ app.listen(process.env.PORT, () => console.log(`App listening at http://localhos
 app.get('/', (req, res) => {
   res.send('Server is working');
 });
+
 
 
 
