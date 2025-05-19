@@ -80,64 +80,75 @@ L.CanvasOverlay = L.Layer.extend({
 });
 
 
+//fetch API/endpoint
+async function fetchData(endpoint) {
+  try {
+    const response = await fetch(`http://localhost:5000/api/${endpoint}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch /api/${endpoint}: ${response.statusText}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(`Error fetching ${endpoint}:`, error);
+    return null;
+  }
+}
 
+async function loadAllMapData() {
+  const [strade, tratti, giunti] = await Promise.all([
+    fetchData('strade'),
+    fetchData('tratti'),
+    fetchData('giunti')
+  ]);
 
-// Carico i dati
-// TODO: implementare API per caricare da DB
-fetch('/js/map.json')   //provv
-  .then(res => res.json())
-  .then(data => {
-    mantoStradale = data.mantoStradale;
+  const projectedSegments = tratti.map(tratto => {
+    const start = giunti[tratto.start.toString()].coord;
+    const end = giunti[tratto.end.toString()].coord;
+    if (
+      start && end &&
+      isFinite(start.x) && isFinite(start.y) &&
+      isFinite(end.x) && isFinite(end.y)
+    ) {
+      const [lon1, lat1] = proj4(utm32N, proj4.WGS84, [parseFloat(start.x), parseFloat(start.y)]);
+      const [lon2, lat2] = proj4(utm32N, proj4.WGS84, [parseFloat(end.x), parseFloat(end.y)]);
 
-    // Proietto i segmenti per calcolarli solo una volta
-    // Operazione che chiede tempo (tanti segmenti, tanti giunti)
-    const projectedSegments = mantoStradale.tratti.map(tratto => {
-        const start = mantoStradale.giunti[tratto.start.toString()].coord;
-        const end = mantoStradale.giunti[tratto.end.toString()].coord;
-        if (
-            start && end &&
-            isFinite(start.x) && isFinite(start.y) &&
-            isFinite(end.x) && isFinite(end.y)
-        ) {
-        const [lon1, lat1] = proj4(utm32N, proj4.WGS84, [parseFloat(start.x), parseFloat(start.y)]);
-        const [lon2, lat2] = proj4(utm32N, proj4.WGS84, [parseFloat(end.x), parseFloat(end.y)]);
+      return [[lat1, lon1], [lat2, lon2]];
+    } else { return; }
+  }).filter(Boolean);
 
-        return [[lat1, lon1], [lat2, lon2]];
-        } else { return; }
-    }).filter(Boolean);
+  const overlay = new L.CanvasOverlay((canvas, ctx, map) => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const [[lat1, lon1], [lat2, lon2]] of projectedSegments) {
+      const p1 = map.latLngToContainerPoint([lat1, lon1]);
+      const p2 = map.latLngToContainerPoint([lat2, lon2]);
+      ctx.beginPath();
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.strokeStyle = '#444';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  });
 
-    // Implementazione funzione che disegna
-    const overlay = new L.CanvasOverlay((canvas, ctx, map) => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (const [[lat1, lon1], [lat2, lon2]] of projectedSegments) {
-                const p1 = map.latLngToContainerPoint([lat1, lon1]);
-                const p2 = map.latLngToContainerPoint([lat2, lon2]);
-                ctx.beginPath();
-                ctx.moveTo(p1.x, p1.y);
-                ctx.lineTo(p2.x, p2.y);
-                ctx.strokeStyle = '#444';
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-            }
-    });
+  // Per 'nascondere' il canvas mentre si zoomma 
+  // Altrimenti lagga
+  map.on('zoomstart', () => {
+    overlay._canvas.style.display = 'none';
+  });
+  map.on('zoomend', () => {
+    overlay._canvas.style.display = 'block';
+  });
     
-    // Per 'nascondere' il canvas mentre si zoomma 
-    // Altrimenti lagga
-    map.on('zoomstart', () => {
-      overlay._canvas.style.display = 'none';
-    });
-    map.on('zoomend', () => {
-      overlay._canvas.style.display = 'block';
-    });
-    
-    overlay.addTo(map);
+  overlay.addTo(map);
 
-    filtroStrade.addEventListener('change', function () {
-        if (this.checked) {
-            overlay.addTo(map);
-        } else {
-            map.removeLayer(overlay);
-        }
-    });
+  filtroStrade.addEventListener('change', function () {
+    if (this.checked) {
+      overlay.addTo(map);
+    } else {
+      map.removeLayer(overlay);
+    }
+  });
 
-});
+}
+
+loadAllMapData();
