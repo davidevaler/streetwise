@@ -15,12 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("login-password").value;
 
     try {
-      const res = await fetch("http://localhost:5001/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-
+      const res = await fetch(`${SERVER_URL}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
       const data = await res.json();
 
@@ -34,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Login effettuato con successo!");
       loginDropdown.classList.add("hidden");
 
-      // opzionale: mostra nome utente o cambia UI
     } catch (err) {
       alert("Errore di rete");
       console.error(err);

@@ -6,9 +6,10 @@ require('dotenv').config();
 
 const app = express();
 
-// Cors - accetta richieste dal client React su localhost:3000
+const CLIENT_URL = process.env.CLIENT_URL;
+
 app.use(cors({
-  origin: 'http://localhost:3000'
+  origin: CLIENT_URL
 }));
 
 app.use(express.static('public'));
@@ -25,8 +26,7 @@ mongoose.connect(process.env.MONGO_URI, {})
   .then(() => console.log('Database MongoDB Connesso...'))
   .catch(err => console.log(err));
 
-// Porta da .env
-const PORT = process.env.PORT || 5001; //su macOS è 5001, su Windows è 5000
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server in ascolto sulla porta ${PORT}`));
 
 // Rotta base per test
