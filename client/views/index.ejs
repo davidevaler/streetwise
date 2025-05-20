@@ -15,12 +15,12 @@
       <h3>Filtri</h3>
       <ul>
         <li>
-          <input type="checkbox" id="filter1" name="filter1">
-          <label for="filter1">Mostra Strade</label>
+          <input type="checkbox" id="filtroTratti" name="filtroTratti">
+          <label for="filtroTratti">Mostra Strade</label>
         </li>
         <li>
-          <input type="checkbox" id="filter2" name="filter2">
-          <label for="filter2">Filtro 2</label>
+          <input type="checkbox" id="filtroIncidenti" name="filtroIncidenti">
+          <label for="filtroIncidenti">Mostra Incidenti</label>
         </li>
         <li>
           <input type="checkbox" id="filter3" name="filter3">
@@ -31,7 +31,6 @@
     <div class="wide">
       <div class="map-container center">
         <div id="leaflet-map"></div>
-        <canvas class="map" id="map-canvas"></canvas>
       </div>
       </div>
   </div>
@@ -40,6 +39,13 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />   
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script> 
-  <script src="/js/map-strade.js"></script>
+  
+  <script src="/js/map/utils.js"></script>
+  <script src="/js/map/draw-tratti.js"></script>
+  <script src="/js/map/draw-incidenti.js"></script>
+  <script src="/js/map/canvas-overlay.js"></script>
+  <script src="/js/map/map-loader.js"></script>
+  <script src="/js/map/main.js"></script>
+
 </body>
 </html>

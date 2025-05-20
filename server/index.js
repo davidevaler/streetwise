@@ -26,6 +26,9 @@ app.use('/api/giunti', giuntiRoutes);
 const trattiRoutes = require('./routes/tratti');
 app.use('/api/tratti', trattiRoutes);
 
+const incidentiRoutes = require('./routes/incidenti');
+app.use('/api/incidenti', incidentiRoutes);
+
 app.listen(process.env.PORT, () => console.log(`App listening at http://localhost:${process.env.PORT}`))
 app.get('/', (req, res) => {
   res.send('Server is working');
