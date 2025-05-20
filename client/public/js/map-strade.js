@@ -83,7 +83,7 @@ L.CanvasOverlay = L.Layer.extend({
 //fetch API/endpoint
 async function fetchData(endpoint) {
   try {
-    const response = await fetch(`http://localhost:5000/api/${endpoint}`);
+    const response = await fetch(`${SERVER_URL}/api/${endpoint}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch /api/${endpoint}: ${response.statusText}`);
     }

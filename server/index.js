@@ -33,3 +33,11 @@ app.listen(PORT, () => console.log(`Server in ascolto sulla porta ${PORT}`));
 app.get('/', (req, res) => {
   res.send('Server is working');
 });
+
+const giuntiRouter = require('./routes/giunti');
+const stradeRouter = require('./routes/strade');
+const trattiRouter = require('./routes/tratti');
+
+app.use(giuntiRouter);
+app.use(stradeRouter);
+app.use(trattiRouter);

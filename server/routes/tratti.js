@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const TrattiData = require('../models/trattiData');
 
-router.get('/', async (req, res) => {
+router.get('/api/tratti', async (req, res) => {
     try {
         const data = await TrattiData.find({});        res.json(data);
     } catch (err) {

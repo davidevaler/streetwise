@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const StradeData = require('../models/StradeData');
 
-router.get('/', async (req, res) => {
+router.get('/api/strade', async (req, res) => {
     try {
         const data = await StradeData.find({});
         res.json(data);

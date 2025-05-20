@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const GiuntiData = require('../models/giuntiData');
 
-router.get('/', async (req, res) => {
+router.get('/api/giunti', async (req, res) => {
     try {
         const data = await GiuntiData.find({});
         res.json(data);
