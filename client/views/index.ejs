@@ -30,7 +30,7 @@
         </li>
         <li>
           <input type="checkbox" id="filter2" name="filter2">
-          <label for="filter2">Filtro 2</label>
+          <label for="filter2">Mostra Incidenti</label>
         </li>
         <li>
           <input type="checkbox" id="filter3" name="filter3">
@@ -48,10 +48,14 @@
   <div class="bottom">Comunicazioni</div>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />   
+  <script type="module" src="/js/config.js"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
-  <script src="/js/config.js"></script>
-  <script src="/js/map-strade.js"></script>
+  <script type="module" src="/js/map-common.js"></script>
+  <script type="module" src="/js/map-strade.js"></script>
+  <script type="module" src="/js/map-incidenti.js"></script>
   <script src="/js/login.js"></script>
+  
 </body>
 </html>

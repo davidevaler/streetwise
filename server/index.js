@@ -14,14 +14,14 @@ app.use(cors({
 
 app.use(express.static('public'));
 
-// Parsing JSON body
+//parsing JSON body
 app.use(bodyParser.json());
 
-// Import rotta auth
+//import rotta auth
 const routeLogin = require('./routes/routeLogin');
 app.use('/api/auth', routeLogin);
 
-// Connessione a MongoDB
+//connessione a MongoDB
 mongoose.connect(process.env.MONGO_URI, {})
   .then(() => console.log('Database MongoDB Connesso...'))
   .catch(err => console.log(err));
@@ -29,7 +29,7 @@ mongoose.connect(process.env.MONGO_URI, {})
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Server in ascolto sulla porta ${PORT}`));
 
-// Rotta base per test
+//rotta base per test
 app.get('/', (req, res) => {
   res.send('Server is working');
 });
@@ -37,7 +37,9 @@ app.get('/', (req, res) => {
 const giuntiRouter = require('./routes/giunti');
 const stradeRouter = require('./routes/strade');
 const trattiRouter = require('./routes/tratti');
+const incidentiRouter = require('./routes/incidenti');
 
 app.use(giuntiRouter);
 app.use(stradeRouter);
 app.use(trattiRouter);
+app.use(incidentiRouter);
