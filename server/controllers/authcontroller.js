@@ -1,34 +1,49 @@
-const User = require("../models/user"); // Importa il modello utente
-const jwt = require("jsonwebtoken");    // Importa il pacchetto per gestire JWT
+const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
-// Funzione per creare il token
+// Funzione per creare il token JWT
 const generateToken = (user) => {
-  // Crea un token con payload = id e ruolo dell’utente
-  return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
-    expiresIn: "1d" // Il token scade dopo 1 giorno
-  });
+  return jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" }
+  );
 };
 
-// Controller per login
+// Controller per il login
 exports.login = async (req, res) => {
-  const { email, password } = req.body;  // Legge email e password dalla richiesta
+  console.log("login() chiamato - body ricevuto:", req.body);  // <-- DEBUG
 
-  const user = await User.findOne({ email }); // Cerca utente nel DB
-  if (!user || !(await user.matchPassword(password))) {
-    // Se utente non trovato o password errata
-    return res.status(401).json({ message: "Credenziali errate" });
-  }
+  const { email, password } = req.body;
 
-  // Se login ok, genera token
-  const token = generateToken(user);
+  try {
+    const user = await User.findOne({ email });
 
-  // Risponde con token e dati utente (senza password!)
-  res.json({
-    token,
-    user: {
-      id: user._id,
-      email: user.email,
-      role: user.role
+    if (!user) {
+      console.log("Utente non trovato");
+      return res.status(404).json({ message: "Utente non trovato" });
     }
-  });
+
+    const passwordMatch = await user.matchPassword(password);
+    if (!passwordMatch) {
+      console.log("Password errata");
+      return res.status(401).json({ message: "Password errata" });
+    }
+
+    const token = generateToken(user);
+    console.log("Login OK, token generato");
+
+    return res.json({
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+      },
+    });
+
+  } catch (error) {
+    console.error("Errore nel login:", error);
+    return res.status(500).json({ message: "Errore del server" });
+  }
 };

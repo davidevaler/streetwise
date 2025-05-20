@@ -1,39 +1,35 @@
-const bodyParser = require('body-parser')
-const express = require('express')
-const app = express()
-const mongoose = require('mongoose')
-const cors = require('cors')
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
-const routeLogin = require("./routes/routeLogin");
-app.use("/api/auth", routeLogin); 
+const app = express();
 
-app.use(cors(
-    {
-        origin: 'http://localhost:3000'
-    }
-)) // per connettersi dal client
-app.use(bodyParser.json()) // converti le richieste in JSON
+// Cors - accetta richieste dal client React su localhost:3000
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
-mongoose
-    .connect(process.env.MONGO_URI, {})
-    .then(() => console.log('Database MongoDB Connesso...'))
-    .catch((err) => console.log(err))
+app.use(express.static('public'));
 
-const stradeRoutes = require('./routes/strade');
-app.use('/api/strade', stradeRoutes);
+// Parsing JSON body
+app.use(bodyParser.json());
 
-const giuntiRoutes = require('./routes/giunti');
-app.use('/api/giunti', giuntiRoutes);
+// Import rotta auth
+const routeLogin = require('./routes/routeLogin');
+app.use('/api/auth', routeLogin);
 
-const trattiRoutes = require('./routes/tratti');
-app.use('/api/tratti', trattiRoutes);
+// Connessione a MongoDB
+mongoose.connect(process.env.MONGO_URI, {})
+  .then(() => console.log('Database MongoDB Connesso...'))
+  .catch(err => console.log(err));
 
-app.listen(process.env.PORT, () => console.log(`App listening at http://localhost:${process.env.PORT}`))
+// Porta da .env
+const PORT = process.env.PORT || 5001; //su macOS è 5001, su Windows è 5000
+app.listen(PORT, () => console.log(`Server in ascolto sulla porta ${PORT}`));
+
+// Rotta base per test
 app.get('/', (req, res) => {
   res.send('Server is working');
 });
-
-
-
-
