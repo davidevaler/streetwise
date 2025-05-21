@@ -1,12 +1,8 @@
 const { utm32N, resizeCanvas, fetchData } = window.utils;
 
-//const canvasTratti = document.getElementById('map-canvas-tratti');
-//const ctxTratti = canvasTratti.getContext('2d');
 const filtroTratti = document.getElementById('filtroTratti');
 filtroTratti.checked = false
 
-//const canvasIncidenti = document.getElementById('map-canvas-incidenti');
-//const ctxIncidenti = canvasIncidenti.getContext('2d');
 const filtroIncidenti = document.getElementById('filtroIncidenti');
 filtroIncidenti.checked = false
 
@@ -20,9 +16,11 @@ window.loadAllMapData = async function(map) {
     fetchData('incidenti')
   ]);
 
+  const giuntiById = Object.fromEntries(giunti.map(g => [g.id.toString(), g]));
+
   const trattiProiettati = tratti.map(tratto => {
-    const start = giunti[tratto.start.toString()].coord;
-    const end = giunti[tratto.end.toString()].coord;
+    const start = giuntiById[tratto.start.toString()].coord;
+    const end = giuntiById[tratto.end.toString()].coord;
     if (
       start && end &&
       isFinite(start.x) && isFinite(start.y) &&

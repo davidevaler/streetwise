@@ -5,17 +5,26 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 require('dotenv').config();
 
-app.use(cors(
-    {
-        origin: 'http://localhost:3000'
-    }
-)) // per connettersi dal client
-app.use(bodyParser.json()) // converti le richieste in JSON
+const CLIENT_URL = process.env.CLIENT_URL;
+const PORT = process.env.PORT;
 
-mongoose
-    .connect(process.env.MONGO_URI, {})
-    .then(() => console.log('Database MongoDB Connesso...'))
-    .catch((err) => console.log(err))
+app.use(cors(
+  {  origin: CLIENT_URL  }
+));
+app.use(express.static('public'));
+// Parsing JSON body
+app.use(bodyParser.json());
+
+
+// Connessione a MongoDB
+mongoose.connect(process.env.MONGO_URI, {})
+  .then(() => console.log('Database MongoDB Connesso...'))
+  .catch(err => console.log(err));
+
+
+// Import rotta auth
+const routeLogin = require('./routes/routeLogin');
+app.use('/api/auth', routeLogin);
 
 const stradeRoutes = require('./routes/strade');
 app.use('/api/strade', stradeRoutes);
@@ -29,10 +38,9 @@ app.use('/api/tratti', trattiRoutes);
 const incidentiRoutes = require('./routes/incidenti');
 app.use('/api/incidenti', incidentiRoutes);
 
-app.listen(process.env.PORT, () => console.log(`App listening at http://localhost:${process.env.PORT}`))
+
+app.listen(PORT, () => console.log(`Server in ascolto sulla porta ${PORT}`));
+
 app.get('/', (req, res) => {
   res.send('Server is working');
 });
-
-
-

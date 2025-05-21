@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Map App</title>
+  <title>StreetWise</title>
   <link rel="stylesheet" href="/css/style.css">
     <link
     rel="stylesheet"
@@ -9,7 +9,17 @@
   />
 </head>
 <body>
-  <div class="navbar">navbar <button class="login-btn">login</button></div>
+  <div class="navbar">
+    <button class="login-btn">LOGIN</button>
+    <div id="login-dropdown" class="login-dropdown hidden">
+      <form id="loginForm">
+        <input type="email" id="login-email" placeholder="Email" required /><br>
+        <input type="password" id="login-password" placeholder="Password" required /><br>
+        <button type="submit">Accedi</button>
+      </form>
+  </div>
+    </div>
+  </div>
   <div class="container">
     <div class="sidebar">
       <h3>Filtri</h3>
@@ -36,6 +46,10 @@
   </div>
   <div class="bottom">Comunicazioni</div>
 
+  
+  <script src="/js/config.js"></script>
+  <script src="/js/login.js"></script>
+
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />   
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script> 
@@ -46,6 +60,5 @@
   <script src="/js/map/canvas-overlay.js"></script>
   <script src="/js/map/map-loader.js"></script>
   <script src="/js/map/main.js"></script>
-
 </body>
 </html>
