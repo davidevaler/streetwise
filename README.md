@@ -66,49 +66,52 @@ StreetWise è una piattaforma web per la gestione della mobilità urbana, pensat
 streetwise/
 ├── .gitattributes
 ├── .gitignore
-├── client/                # Frontend (EJS, CSS, JS)
+├── client/                                 # Frontend (EJS, CSS, JS)
 │   ├── .gitignore
-│   ├── app.js             # Punto di ingresso client
-│   ├── package.json       # Dipendenze front-end
+│   ├── app.js                              # Punto di ingresso client
 │   ├── package-lock.json
-│   ├── public/            # Risorse statiche
+│   ├── package.json                        # Dipendenze front-end
+│   ├── public/                             # Risorse statiche
 │   │   ├── css/
-│   │   │   └── style.css  # Stili personalizzati
-│   │   └── js/            # Script lato client
+│   │   │   └── style.css
+│   │   └── js/                             # Script lato client
 │   │       ├── config.js
-│   │       ├── login.js
-│   │       ├── map-common.js
-│   │       ├── map-incidenti.js
-│   │       ├── map-strade.js
-│   │       ├── map.js
-│   │       └── map.json   # Configurazioni mappa
+│   │       ├── login.js                   
+│   │       └── map/                        
+│   │           ├── canvas-overlay.js
+│   │           ├── draw-incidenti.js
+│   │           ├── draw-tratti.js
+│   │           ├── main.js
+│   │           ├── map-loader.js
+│   │           └── utils.js
 │   ├── routes/
-│   │   └── index.js       # Rotte di rendering EJS
+│   │   └── index.js
 │   └── views/
-│       └── index.ejs      # Template principale
-├── package.json           # Dipendenze comuni (se presenti)
+│       └── index.ejs                       
 ├── package-lock.json
-├── README.md              # Questo file
-└── server/                # Backend (Express.js)
+├── package.json
+├── README.md
+└── server/                                 # Backend (Express.js)
     ├── .gitignore
-    ├── controllers/       # Logica e middleware
+    ├── controllers/                        # Logica e middleware
     │   ├── authcontroller.js
     │   └── authMiddleware.js
-    ├── index.js          # Punto di ingresso server
-    ├── models/           # Accesso ai dati
+    ├── incidenti.json
+    ├── index.js                            # Punto di ingresso server
+    ├── models/
     │   ├── giuntiData.js
     │   ├── incidentiData.js
     │   ├── stradeData.js
     │   ├── trattiData.js
     │   └── user.js
-    ├── routes/           # API REST
-    │   ├── giunti.js
-    │   ├── incidenti.js
-    │   ├── routeLogin.js
-    │   ├── strade.js
-    │   └── tratti.js
+    ├── package-lock.json
     ├── package.json
-    └── package-lock.json
+    └── routes/                             # API REST
+        ├── giunti.js
+        ├── incidenti.js
+        ├── routeLogin.js
+        ├── strade.js
+        └── tratti.js
 ```
 
 ---
