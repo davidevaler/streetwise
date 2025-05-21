@@ -76,8 +76,13 @@ streetwise/
 │   │   │   └── style.css
 │   │   └── js/                             # Script lato client
 │   │       ├── config.js
+<<<<<<< HEAD
 │   │       ├── login.js
 │   │       └── map/
+=======
+│   │       ├── login.js
+│   │       └── map/
+>>>>>>> b0ac0ad972af1e1e49609e45a14c9f9ff99c0fd7
 │   │           ├── canvas-overlay.js
 │   │           ├── draw-incidenti.js
 │   │           ├── draw-tratti.js
