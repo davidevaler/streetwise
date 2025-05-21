@@ -1,1 +1,1 @@
-const SERVER_URL = "http://localhost:5001";
+window.SERVER_URL = "http://localhost:5001";

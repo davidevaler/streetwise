@@ -31,6 +31,7 @@ L.CanvasOverlay = L.Layer.extend({
 
     this._canvas.width = size.x;
     this._canvas.height = size.y;
+    
     L.DomUtil.setPosition(this._canvas, pos);
     let redrawTimeout = 0;
     clearTimeout(redrawTimeout);

@@ -16,7 +16,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 
 
-// Connessione a MongoDB
+//connessione a MongoDB
 mongoose.connect(process.env.MONGO_URI, {})
   .then(() => console.log('Database MongoDB Connesso...'))
   .catch(err => console.log(err));

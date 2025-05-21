@@ -39,7 +39,7 @@ window.loadAllMapData = async function(map) {
       pos && isFinite(pos.x) && isFinite(pos.y)
     ) {
         const [lon, lat] = proj4(utm32N, proj4.WGS84, [parseFloat(pos.x), parseFloat(pos.y)]);
-        return [lat, lon];
+        return [lat, lon, 1]; //intensità uguale per ogni incidente (si potrebbe variare con più dati)
     } else { return; }
   }).filter(Boolean);
 
@@ -52,18 +52,20 @@ window.loadAllMapData = async function(map) {
     ctx.clearRect(0,0,canvas.width, canvas.height);
     drawTratti(trattiProiettati, ctx, map);
   }, { name: 'trattiLayer', pane: 'pane-tratti' });
-  const overlayIncidenti = new L.CanvasOverlay((canvas, ctx, map) => {
-    ctx.clearRect(0,0,canvas.width, canvas.height);
-    drawIncidenti(incidentiProiettati, ctx, map);
-  }, { name: 'incidentiLayer', pane: 'pane-incidenti' });
-  
+   
+  const heatLayer = L.heatLayer(incidentiProiettati, {
+    radius: 15,
+    blur: 25,
+    maxZoom: 17,
+  });
+
   map.on('zoomstart', () => {
     overlayTratti._canvas.style.display = 'none';
-    overlayIncidenti._canvas.style.display = 'none';
+    //heatLayer._canvas.style.display = 'none';
   });
   map.on('zoomend', () => {
     overlayTratti._canvas.style.display = 'block';
-    overlayIncidenti._canvas.style.display = 'block';
+    //heatLayer._canvas.style.display = 'block';
   });
 
   filtroTratti.addEventListener('change', function() {
@@ -71,7 +73,7 @@ window.loadAllMapData = async function(map) {
     else { map.removeLayer(overlayTratti); }
   });
   filtroIncidenti.addEventListener('change', function() {
-    if (this.checked) { overlayIncidenti.addTo(map); } 
-    else { map.removeLayer(overlayIncidenti); }
+    if (this.checked) { heatLayer.addTo(map); } 
+    else { map.removeLayer(heatLayer); }
   });
 }
