@@ -1,1 +1,124 @@
 # StreetWise
+
+StreetWise è una piattaforma web per la gestione della mobilità urbana, pensata per fornire a cittadini e amministratori strumenti di visualizzazione, segnalazione e analisi dei dati di traffico, incidenti e trasporto pubblico.
+
+---
+
+## Caratteristiche principali
+
+- **Mappa interattiva**: visualizzazione dei flussi di traffico, incidenti e fermate del trasporto pubblico tramite Leaflet.js.
+- **Segnalazioni**: creazione, aggiornamento e cancellazione di segnalazioni (buche, ostacoli, incidenti).
+- **Gestione segnalazioni**: assegnazione di priorità, monitoraggio dello stato e filtri per categoria.
+- **Annunci informativi**: pubblicazione e programmazione di comunicazioni ufficiali.
+- **Autenticazione e profili utente**: login, gestione JWT o sessioni, ruoli (Utente, Operatore, Admin).
+- **Esportazione dati**: download dei dati in formato JSON per analisi esterne.
+
+---
+
+## Tecnologie
+
+- **Backend**: Node.js, Express.js
+- **Frontend**: EJS, HTML5, CSS3, JavaScript
+- **Mappe**: Leaflet.js con API Open Data del Comune di Trento
+- **Autenticazione**: JSON Web Token (JWT)
+- **Database**: MongoDB
+
+---
+
+## Prerequisiti
+
+- Node.js ≥ 14
+- npm (incluso in Node.js)
+- Browser (Chrome, Firefox, Edge, Safari)
+
+---
+
+## Installazione e avvio
+
+1. Clona il repository:
+   ```bash
+   git clone https://github.com/davidevaler/streetwise.git
+   cd streetwise
+   ```
+2. Installa le dipendenze del progetto principale:
+   ```bash
+   npm install
+   ```
+3. Installa e avvia il **server**:
+   ```bash
+   cd server
+   npm install
+   node index.js       
+   ```
+4. Installa e avvia il **client**:
+   ```bash
+   cd ../client
+   npm install
+   node app.js       
+   ```
+5. Di default è possibile accedere all’applicazione via browser su `http://localhost:3000`.
+
+---
+
+## Struttura del progetto
+
+```
+streetwise/
+├── .gitattributes
+├── .gitignore
+├── client/                # Frontend (EJS, CSS, JS)
+│   ├── .gitignore
+│   ├── app.js             # Punto di ingresso client
+│   ├── package.json       # Dipendenze front-end
+│   ├── package-lock.json
+│   ├── public/            # Risorse statiche
+│   │   ├── css/
+│   │   │   └── style.css  # Stili personalizzati
+│   │   └── js/            # Script lato client
+│   │       ├── config.js
+│   │       ├── login.js
+│   │       ├── map-common.js
+│   │       ├── map-incidenti.js
+│   │       ├── map-strade.js
+│   │       ├── map.js
+│   │       └── map.json   # Configurazioni mappa
+│   ├── routes/
+│   │   └── index.js       # Rotte di rendering EJS
+│   └── views/
+│       └── index.ejs      # Template principale
+├── package.json           # Dipendenze comuni (se presenti)
+├── package-lock.json
+├── README.md              # Questo file
+└── server/                # Backend (Express.js)
+    ├── .gitignore
+    ├── controllers/       # Logica e middleware
+    │   ├── authcontroller.js
+    │   └── authMiddleware.js
+    ├── index.js          # Punto di ingresso server
+    ├── models/           # Accesso ai dati
+    │   ├── giuntiData.js
+    │   ├── incidentiData.js
+    │   ├── stradeData.js
+    │   ├── trattiData.js
+    │   └── user.js
+    ├── routes/           # API REST
+    │   ├── giunti.js
+    │   ├── incidenti.js
+    │   ├── routeLogin.js
+    │   ├── strade.js
+    │   └── tratti.js
+    ├── package.json
+    └── package-lock.json
+```
+
+---
+
+## Contatti
+
+- **Alessandro Morelato**: [alessandro.morelato@studenti.unitn.it](mailto:alessandro.morelato@studenti.unitn.it)
+- **Davide Valer**: [davide.valer@studenti.unitn.it](mailto:davide.valer@studenti.unitn.it)
+- **Giacomo Saltori**: [giacomo.saltori-1@studenti.unitn.it](mailto:giacomo.saltori-1@studenti.unitn.it)
+
+---
+
+*Progetto realizzato per il corso di Ingegneria del Software 2024/2025 – Università di Trento*
