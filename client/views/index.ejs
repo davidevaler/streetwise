@@ -1,53 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StreetWise</title>
   <link rel="stylesheet" href="/css/style.css">
-    <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16x16.png">
+  <link rel="manifest" href="/img/site.webmanifest">
 </head>
 <body>
   <div class="navbar">
+    <div class="navbar-brand">
+      <h1>StreetWise</h1>
+    </div>
     <button class="login-btn">LOGIN</button>
     <div id="login-dropdown" class="login-dropdown hidden">
       <form id="loginForm">
-        <input type="email" id="login-email" placeholder="Email" required /><br>
-        <input type="password" id="login-password" placeholder="Password" required /><br>
+        <input type="email" id="login-email" placeholder="📧 Email" required />
+        <input type="password" id="login-password" placeholder="🔒 Password" required />
         <button type="submit">Accedi</button>
       </form>
-  </div>
     </div>
   </div>
+  
   <div class="container">
     <div class="sidebar">
       <h3>Filtri</h3>
       <ul>
         <li>
-          <input type="checkbox" id="filtroTratti" name="filtroTratti">
-          <label for="filtroTratti">Mostra Strade</label>
+          <label for="filtroTratti">
+            <input type="checkbox" id="filtroTratti" name="filtroTratti">
+            🛣️ Mostra Strade
+          </label>
         </li>
         <li>
-          <input type="checkbox" id="filtroIncidenti" name="filtroIncidenti">
-          <label for="filtroIncidenti">Mostra Incidenti</label>
+          <label for="filtroIncidenti">
+            <input type="checkbox" id="filtroIncidenti" name="filtroIncidenti">
+            ⚠️ Mostra Incidenti
+          </label>
         </li>
         <li>
-          <input type="checkbox" id="filter3" name="filter3">
-          <label for="filter3">Filtro 3</label>
+          <label for="filter3">
+            <input type="checkbox" id="filter3" name="filter3">
+            🔍 Filtro 3
+          </label>
         </li>
       </ul>
     </div>
+    
     <div class="wide">
       <div class="map-container center">
         <div id="leaflet-map"></div>
       </div>
-      </div>
+    </div>
   </div>
+  
   <div class="bottom">Comunicazioni</div>
   
   <script src="/js/config.js"></script>
-  
   <script src="/js/auth/login.js"></script>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />   

@@ -3,7 +3,7 @@ const router = express.Router();
 const authController = require('../controllers/authcontroller');
 const { protect, authorizeRoles } = require('../controllers/authMiddleware');
 
-// LOGIN - rotta pubblica, NO middleware protect
+// LOGIN - rotta pubblica
 router.post('/login', authController.login);
 
 // ME - rotta protetta da token

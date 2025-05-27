@@ -1,31 +1,75 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
+// Middleware per verificare il token JWT (protect)
 const protect = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Accesso negato. Nessun token.' });
-  }
-
-  const token = authHeader.split(' ')[1];
-
   try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    
+    if (!token) {
+      return res.status(401).json({ message: 'Token mancante' });
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decoded.id).select('-password');
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({ message: 'Utente non trovato' });
+    }
+
+    req.user = user;
     next();
   } catch (error) {
     return res.status(401).json({ message: 'Token non valido' });
   }
 };
 
+// Middleware per autorizzare ruoli specifici
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ message: 'Accesso non autorizzato' });
+    if (!req.user) {
+      return res.status(401).json({ message: 'Utente non autenticato' });
     }
+    
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ 
+        message: `Accesso negato. Ruolo richiesto: ${roles.join(' o ')}` 
+      });
+    }
+    
     next();
   };
 };
 
-module.exports = { protect, authorizeRoles };
+// Middleware specifico per verificare che l'utente sia admin
+const requireAdmin = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    
+    if (!token) {
+      return res.status(401).json({ message: 'Token mancante' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({ message: 'Utente non trovato' });
+    }
+
+    if (user.role !== 'admin') {
+      return res.status(403).json({ message: 'Accesso negato. Solo admin.' });
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Token non valido' });
+  }
+};
+
+module.exports = { 
+  protect, 
+  authorizeRoles, 
+  requireAdmin 
+};

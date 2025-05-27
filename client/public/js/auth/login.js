@@ -28,10 +28,20 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Salva token e nasconde tendina
+      // Salva token e dati utente
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      
       alert("Login effettuato con successo!");
       loginDropdown.classList.add("hidden");
+
+      // Controlla il ruolo e reindirizza
+      if (data.user.role === "admin") {
+        window.location.href = "/admin";
+      } else {
+        // Per i delegati rimane sulla stessa pagina
+        location.reload();
+      }
 
     } catch (err) {
       alert("Errore di rete");
