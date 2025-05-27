@@ -73,18 +73,22 @@ streetwise/
 │   ├── package.json                        # Dipendenze front-end
 │   ├── public/                             # Risorse statiche
 │   │   ├── css/
+│   │   │   ├── admin.css                   # Stili per il pannello admin
 │   │   │   └── style.css
+│   │   ├── img/                            # Icone e favicon per PWA/mobile
+│   │   │   ├── android-chrome-192x192.png
+│   │   │   ├── android-chrome-512x512.png
+│   │   │   ├── apple-touch-icon.png
+│   │   │   ├── favicon-16x16.png
+│   │   │   ├── favicon-32x32.png
+│   │   │   ├── favicon.ico
+│   │   │   └── site.webmanifest
 │   │   └── js/                             # Script lato client
+│   │       ├── auth/                       # Modulo autenticazione separato
+│   │       │   └── login.js                # Logica login (separata)
 │   │       ├── config.js
-<<<<<<< HEAD
-│   │       ├── login.js
 │   │       └── map/
-=======
-│   │       ├── login.js
-│   │       └── map/
->>>>>>> b0ac0ad972af1e1e49609e45a14c9f9ff99c0fd7
 │   │           ├── canvas-overlay.js
-│   │           ├── draw-incidenti.js
 │   │           ├── draw-tratti.js
 │   │           ├── main.js
 │   │           ├── map-loader.js
@@ -92,6 +96,7 @@ streetwise/
 │   ├── routes/
 │   │   └── index.js
 │   └── views/
+│       ├── admin.ejs                       # Vista pannello amministrativo
 │       └── index.ejs
 ├── package-lock.json
 ├── package.json
@@ -116,7 +121,8 @@ streetwise/
         ├── incidenti.js
         ├── routeLogin.js
         ├── strade.js
-        └── tratti.js
+        ├── tratti.js
+        └── users.js                        # Nuove API per gestione utenti
 ```
 
 ---
