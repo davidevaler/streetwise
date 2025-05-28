@@ -55,17 +55,21 @@ window.loadAllMapData = async function(map) {
    
   const heatLayer = L.heatLayer(incidentiProiettati, {
     radius: 15,
-    blur: 25,
-    maxZoom: 17,
+    blur:   25,
+    maxZoom:14,
   });
 
   map.on('zoomstart', () => {
+    if (overlayTratti._canvas && overlayTratti._canvas.style) {
     overlayTratti._canvas.style.display = 'none';
     //heatLayer._canvas.style.display = 'none';
+    }
   });
   map.on('zoomend', () => {
+    if (overlayTratti._canvas && overlayTratti._canvas.style){
     overlayTratti._canvas.style.display = 'block';
     //heatLayer._canvas.style.display = 'block';
+    }
   });
 
   filtroTratti.addEventListener('change', function() {
