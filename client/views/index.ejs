@@ -41,12 +41,16 @@
             <input type="checkbox" id="filtroIncidenti" name="filtroIncidenti">
             ⚠️ Mostra Incidenti
           </label>
-        </li>
-        <li>
-          <label for="filter3">
-            <input type="checkbox" id="filter3" name="filter3">
-            🔍 Filtro 3
-          </label>
+          <!-- Sottofiltro per l'anno degli incidenti -->
+          <div id="subfilter-incidenti" class="subfilter hidden">
+            <label for="filtroAnno">
+              📅 Anno:
+              <select id="filtroAnno" name="filtroAnno">
+                <option value="all">Tutti gli anni</option>
+                <!-- Le opzioni verranno popolate dinamicamente -->
+              </select>
+            </label>
+          </div>
         </li>
       </ul>
     </div>
