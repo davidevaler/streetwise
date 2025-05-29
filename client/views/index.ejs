@@ -43,12 +43,25 @@
           </label>
         </li>
         <li>
+          <label for="filtroTraffico">
+            <input type="checkbox" id="filtroTraffico" name="filtroTraffico">
+            🚗 Traffico in Tempo Reale
+          </label>
+        </li>
+        <li>
           <label for="filter3">
             <input type="checkbox" id="filter3" name="filter3">
             🔍 Filtro 3
           </label>
         </li>
       </ul>
+      
+      <!-- Pannello info traffico -->
+      <div id="traffic-info" class="traffic-info" style="display: none;">
+        <h4>📊 Stato Traffico</h4>
+        <div id="traffic-summary"></div>
+        <small id="traffic-last-update"></small>
+      </div>
     </div>
     
     <div class="wide">
@@ -71,6 +84,7 @@
   <script src="/js/map/utils.js"></script>
   <script src="/js/map/draw-tratti.js"></script>
   <script src="/js/map/canvas-overlay.js"></script>
+  <script src="/js/map/traffico.js"></script>
   <script src="/js/map/map-loader.js"></script>
   <script src="/js/map/main.js"></script>
 
