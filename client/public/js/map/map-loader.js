@@ -1,4 +1,4 @@
-const { convertToWGS84, utm32N, resizeCanvas, fetchData } = window.utils;
+const { convertToWGS84, utm32N, resizeCanvas, fetchData, fetchDataField } = window.utils;
 
 const filtroTratti = document.getElementById('filtroTratti');
 filtroTratti.checked = false;
@@ -13,12 +13,12 @@ const filtroAnno = document.getElementById('filtroAnno');
 let allIncidentiProiettati = [];
 let currentHeatLayer = null;
 
-window.loadAllMapData = async function(map) {
+window.loadAllMapData = async function(map, idCitta) {
 
   const [strade, tratti, giunti, incidenti] = await Promise.all([
-    fetchData('strade'),
-    fetchData('tratti'),
-    fetchData('giunti'),
+    fetchDataField('strade', 'citta', idCitta),
+    fetchDataField('tratti', 'citta', idCitta),
+    fetchDataField('giunti', 'citta', idCitta),
     fetchData('incidenti')
   ]);
 

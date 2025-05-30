@@ -26,6 +26,9 @@ mongoose.connect(process.env.MONGO_URI, {})
 const routeLogin = require('./routes/routeLogin');
 app.use('/api/auth', routeLogin);
 
+const cittaRoutes = require('./routes/citta');
+app.use('/api/citta', cittaRoutes);
+
 const usersRoutes = require('./routes/users');
 app.use('/api/users', usersRoutes);
 
