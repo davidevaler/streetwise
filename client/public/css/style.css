@@ -7,6 +7,8 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      overflow-y: hidden;
+      height: 100vh;
       min-height: 100vh;
     }
     
@@ -36,7 +38,25 @@
     .navbar-brand::before {
       font-size: 1.5em;
     }
-    
+
+    .navbar input[type="text"] {
+      padding: 10px 15px;
+      border-radius: 25px;
+      border: none;
+      outline: none;
+      font-size: 1em;
+      color: #333;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      width: 220px;
+    }
+
+    .navbar input[type="text"]:focus {
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+
     .login-btn {
       background: rgba(255, 255, 255, 0.2);
       color: white;
@@ -125,9 +145,11 @@
     
     .container {
       display: flex;
-      height: calc(100vh - 140px);
-      gap: 20px;
-      padding: 20px;
+      height: calc(100vh - 150px);
+      gap: 15px;
+      padding: 15px;
+      box-sizing: border-box;
+      overflow: hidden;
     }
     
     .sidebar {
@@ -263,14 +285,14 @@
       background: white;
       border-radius: 15px;
       box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      padding: 20px;
+      padding: 15px;
       font-size: 1.1em;
       font-weight: 500;
       color: #333;
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin: 0 20px 20px 20px;
+      gap: 15px;
+      margin: 0 15px 15px 15px;
     }
     
     .bottom::before {
