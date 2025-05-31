@@ -23,7 +23,5 @@ fetchDataField('citta', 'nome', nomeCitta).then(citta => {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    console.log(citta);
-
     loadAllMapData(map, citta.id);
 });

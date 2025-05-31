@@ -19,7 +19,7 @@ window.loadAllMapData = async function(map, idCitta) {
     fetchDataField('strade', 'citta', idCitta),
     fetchDataField('tratti', 'citta', idCitta),
     fetchDataField('giunti', 'citta', idCitta),
-    fetchData('incidenti')
+    fetchDataField('incidenti', 'citta', idCitta)
   ]);
 
   const giuntiById = Object.fromEntries(giunti.map(g => [g.id.toString(), g]));
