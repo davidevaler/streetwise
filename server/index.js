@@ -44,6 +44,9 @@ app.use('/api/tratti', trattiRoutes);
 const incidentiRoutes = require('./routes/incidenti');
 app.use('/api/incidenti', incidentiRoutes);
 
+const segnalazioniRoutes = require('./routes/segnalazioni');
+app.use('/api/segnalazioni', segnalazioniRoutes);
+
 
 app.listen(PORT, () => console.log(`Server in ascolto sulla porta ${PORT}`));
 
