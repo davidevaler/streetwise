@@ -32,7 +32,7 @@ async function loadTrafficData() {
             trafficData = data;
             updateTrafficDisplay();
             updateTrafficInfo(data);
-            console.log('Dati traffico caricati:', data);
+            console.log('Dati traffico caricati:', data); 
         } else {
             console.error('Errore nel caricamento dati traffico:', data.error);
             showTrafficError('Errore nel caricamento dei dati del traffico');
@@ -103,9 +103,9 @@ function updateTrafficInfo(data) {
     if (summaryDiv && data.summary) {
         summaryDiv.innerHTML = `
             <div class="traffic-summary">
-                <div style="color: ${trafficColors.green};">● Scorrevole: ${data.summary.greenRoutes}</div>
-                <div style="color: ${trafficColors.yellow};">● Moderato: ${data.summary.yellowRoutes}</div>
-                <div style="color: ${trafficColors.red};">● Intenso: ${data.summary.redRoutes}</div>
+                <div><span class="traffic-dot green"></span>Scorrevole: ${data.summary.greenRoutes}</div>
+                <div><span class="traffic-dot yellow"></span>Moderato: ${data.summary.yellowRoutes}</div>
+                <div><span class="traffic-dot red"></span>Intenso: ${data.summary.redRoutes}</div>
             </div>
         `;
     }

@@ -310,51 +310,82 @@
 
     /* Stili per il pannello traffico */
     .traffic-info {
-        margin-top: 20px;
-        padding: 15px;
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        border: 1px solid #dee2e6;
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     .traffic-info h4 {
-        margin: 0 0 10px 0;
-        color: #495057;
-        font-size: 16px;
+      margin: 0 0 10px 0;
+      color: #495057;
+      font-size: 16px;
     }
 
     .traffic-summary {
-        margin-bottom: 10px;
+      margin-bottom: 10px;
     }
 
     .traffic-summary div {
-        margin: 5px 0;
-        font-weight: bold;
-        font-size: 14px;
+      margin: 5px 0;
+      font-weight: bold;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Stili specifici per i diversi stati del traffico */
+    /* Alternativa con pallini colorati più visibili */
+    .traffic-dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .traffic-dot.green {
+      background-color: #28a745;
+    }
+
+    .traffic-dot.yellow {
+      background-color: #ffc107;
+    }
+
+    .traffic-dot.red {
+      background-color: #dc3545;
     }
 
     .traffic-info small {
-        color: #6c757d;
-        font-size: 12px;
+      color: #6c757d;
+      font-size: 12px;
+      font-style: italic;
     }
+
 
     /* Stili per i popup del traffico */
     .traffic-popup {
-        font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-width: 200px;
     }
 
     .traffic-popup h4 {
-        margin: 0 0 10px 0;
-        color: #333;
-        font-size: 16px;
+      margin: 0 0 10px 0;
+      color: #333;
+      font-size: 16px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
     }
 
     .traffic-popup p {
-        margin: 5px 0;
-        font-size: 14px;
+      margin: 5px 0;
+      font-size: 14px;
     }
 
     .traffic-popup small {
-        color: #666;
-        font-style: italic;
+      color: #666;
+      font-style: italic;
     }
