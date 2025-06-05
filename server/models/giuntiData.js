@@ -5,7 +5,8 @@ const GiuntiDataSchema = new mongoose.Schema({
     id: Number,
     coord: Object,
     tipoGiunto: String,
-    trattiCollegati: [Number] 
+    trattiCollegati: [Number],
+    citta: Number
 }, { collection: 'giunti' });
 
 module.exports = mongoose.model('GiuntiData', GiuntiDataSchema);

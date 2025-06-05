@@ -16,6 +16,9 @@
     <div class="navbar-brand">
       <h1>StreetWise</h1>
     </div>
+    <div>
+      <input type="text" id="search-city" value="Trento">
+    </div>
     <button class="login-btn">LOGIN</button>
     <div id="login-dropdown" class="login-dropdown hidden">
       <form id="loginForm">
@@ -41,19 +44,23 @@
             <input type="checkbox" id="filtroIncidenti" name="filtroIncidenti">
             ⚠️ Mostra Incidenti
           </label>
-        </li>
-        <li>
+          <!-- Sottofiltro per l'anno degli incidenti -->
+          <div id="subfilter-incidenti" class="subfilter hidden">
+            <label for="filtroAnno">
+              📅 Anno:
+              <select id="filtroAnno" name="filtroAnno">
+                <option value="all">Tutti gli anni</option>
+                <!-- Le opzioni verranno popolate dinamicamente -->
+              </select>
+            </label>
+          </div>
+       </li>
+       <li>
           <label for="filtroTraffico">
             <input type="checkbox" id="filtroTraffico" name="filtroTraffico">
             🚗 Traffico in Tempo Reale
-          </label>
-        </li>
-        <li>
-          <label for="filter3">
-            <input type="checkbox" id="filter3" name="filter3">
-            🔍 Filtro 3
-          </label>
-        </li>
+        </label>
+       </li>
       </ul>
       
       <!-- Pannello info traffico -->

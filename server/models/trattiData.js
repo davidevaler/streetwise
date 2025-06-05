@@ -5,7 +5,8 @@ const TrattiDataSchema = new mongoose.Schema({
     id: Number,
     start: Number,
     end: Number,
-    idStrada: Number
+    idStrada: Number,
+    citta: Number
 }, { collection: 'tratti' });
 
 module.exports = mongoose.model('TrattiData', TrattiDataSchema);
