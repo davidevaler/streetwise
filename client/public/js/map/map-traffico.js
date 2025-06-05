@@ -6,7 +6,7 @@ let trafficUpdateInterval = null;
 // Colori per i diversi livelli di traffico
 const trafficColors = {
     green: '#00ff00',   // Traffico scorrevole
-    yellow: '#ffff00',  // Traffico moderato
+    yellow: '#ffc107',  // Traffico moderato
     red: '#ff0000'      // Traffico intenso
 };
 
