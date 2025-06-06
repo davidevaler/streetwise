@@ -17,7 +17,7 @@ router.get('/dashboard', protect, (req, res) => {
 
 // pagina admin (Protetta - Richiede autenticazione e ruolo 'admin')
 router.get('/admin', protect, authorizeRoles('admin'), (req, res) => {
-    res.render('admin_page', { user: req.user }); // Renderizza il file admin_page.ejs
+    res.render('admin', { user: req.user }); // Renderizza il file admin_page.ejs
 });
 
 // logout

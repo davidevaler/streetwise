@@ -42,12 +42,13 @@ window.utils = {
 
   // Converte coordinate (auto-rilevamento sistema) in WGS84
   convertToWGS84: function(x, y) {
-    const coordinateSystem = window.utils.detectCoordinateSystem(y);
+    const coordinateSystem = window.utils.detectCoordinateSystem(x);
     const coordX = parseFloat(x);
     const coordY = parseFloat(y);
     
     if (isFinite(coordX) && isFinite(coordY)) {
       const coord = proj4(coordinateSystem, proj4.WGS84, [coordX, coordY]);
+      if (coordinateSystem == window.utils.gaussBoaga) return [coord[0], coord[1]];
       return [coord[1], coord[0]];
     }
     return null;

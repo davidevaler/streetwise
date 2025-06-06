@@ -10,8 +10,8 @@ async function loadCitta(map, nomeCitta) {
 
         const center = convertToWGS84(citta.pos.x, citta.pos.y);
         const bounds = L.latLngBounds(
-            convertToWGS84(citta.bounds.left, citta.bounds.down),
-            convertToWGS84(citta.bounds.right, citta.bounds.up)
+            convertToWGS84(citta.bounds.right, citta.bounds.up),
+            convertToWGS84(citta.bounds.left, citta.bounds.down)
         )
 
         map.setView(center, parseInt(citta.zoom.min)+2);
