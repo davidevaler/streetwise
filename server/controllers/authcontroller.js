@@ -10,6 +10,15 @@ const generateToken = (user) => {
   );
 };
 
+exports.authenticate = async (email, password) => {
+  const user = await User.findOne({ email });
+
+  if (!user || !(await user.matchPassword(password))) {
+    throw new Error('Credenziali non valide');
+  }
+  return user;
+};
+
 // Controller per il login
 exports.login = async (req, res) => {
   console.log("login() chiamato - body ricevuto:", req.body);  // <-- DEBUG

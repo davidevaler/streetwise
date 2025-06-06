@@ -1,0 +1,98 @@
+<body>
+  <div class="admin-container">
+    <div class="admin-header">
+      <h1>Dashboard Admin</h1>
+      <p>Benvenuto nella sezione amministrativa di Streetwise</p>
+    </div>
+    
+    <div class="user-info">
+      <h2>📧 Informazioni Utente</h2>
+      <p><strong>Email:</strong> <span id="user-email">Caricamento...</span></p>
+      <p><strong>Ruolo:</strong> <span id="user-role">Caricamento...</span></p>
+      <p><strong>ID:</strong> <span id="user-id">Caricamento...</span></p>
+    </div>
+    
+    <div class="admin-stats">
+      <div class="stat-card">
+        <h3>👥 Utenti Totali</h3>
+        <div class="stat-value" id="total-users">-</div>
+        <p>Utenti Registrati</p>
+      </div>
+      
+      <div class="stat-card">
+        <h3>🛡️ Amministratori</h3>
+        <div class="stat-value" id="total-admins">-</div>
+        <p>Admin Attivi</p>
+      </div>
+      
+      <div class="stat-card">
+        <h3>👤 Delegati</h3>
+        <div class="stat-value" id="total-delegati">-</div>
+        <p>Utenti Delegati</p>
+      </div>
+    </div>
+    
+    <div class="users-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>👥 Gestione Utenti</h2>
+        <button class="btn btn-success" onclick="openAddUserModal()">➕ Aggiungi Utente</button>
+      </div>
+      
+      <div id="users-loading" class="loading">
+        Caricamento utenti...
+      </div>
+      
+      <div id="users-content" style="display: none;">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Ruolo</th>
+              <th>ID</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody">
+            <!-- Gli utenti verranno inseriti qui dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 30px;">
+      <a href="/" class="btn btn-secondary">← Torna alla Mappa</a>
+      <button class="btn btn-danger" onclick="logout()">🚪 Logout</button>
+    </div>
+  </div>
+
+  <!-- Modal per aggiungere/modificare utente -->
+  <div id="userModal" class="modal">
+    <div class="modal-content">
+      <h3 id="modal-title">Aggiungi Nuovo Utente</h3>
+      <form id="userForm">
+        <div class="form-group">
+          <label for="modal-email">Email:</label>
+          <input type="email" id="modal-email" required>
+        </div>
+        <div class="form-group">
+          <label for="modal-password">Password:</label>
+          <input type="password" id="modal-password" minlength="8">
+          <small style="color: #666;">Minimo 8 caratteri. Lascia vuoto per non modificare (solo in modifica)</small>
+        </div>
+        <div class="form-group">
+          <label for="modal-role">Ruolo:</label>
+          <select id="modal-role">
+            <option value="delegato">Delegato</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeUserModal()">Annulla</button>
+          <button type="submit" class="btn btn-primary" id="modal-submit">Salva</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/config.js"></script>
+</body>

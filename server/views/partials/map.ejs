@@ -1,0 +1,69 @@
+<div class="box expand">
+  <link rel="stylesheet" href="/css/sidebar.css">
+  <link rel="stylesheet" href="/css/map.css">
+
+  <div class="sidebar">
+    <h3>Filtri</h3>
+    <div class="box-container">
+    <ul>
+      <li>
+        <label for="filtroTratti">
+          <input type="checkbox" id="filtroTratti" name="filtroTratti">
+            🛣️ Mostra Strade
+          </label>
+      </li>
+      <li>
+        <label for="filtroIncidenti">
+          <input type="checkbox" id="filtroIncidenti" name="filtroIncidenti">
+            ⚠️ Mostra Incidenti
+          </label>
+          <!-- Sottofiltro per l'anno degli incidenti -->
+          <div id="subfilter-incidenti" class="subfilter hidden">
+            <label for="filtroAnno">
+              📅 Anno:
+              <select id="filtroAnno" name="filtroAnno">
+                <option value="all">Tutti gli anni</option>
+                <!-- Le opzioni verranno popolate dinamicamente -->
+              </select>
+            </label>
+          </div>
+      </li>
+      <li>
+        <label for="filtroTraffico">
+          <input type="checkbox" id="filtroTraffico" name="filtroTraffico">
+          🚗 Traffico in Tempo Reale
+        </label>
+      </li>
+    </ul>
+      
+    <!-- Pannello info traffico -->
+    <div id="traffic-info" class="traffic-info" style="display: none;">
+      <h4>📊 Stato Traffico</h4>
+      <div id="traffic-summary"></div>
+      <small id="traffic-last-update"></small>
+    </div>
+    </div>
+  </div>
+  
+  <div class="map">
+    <h3>Mappa</h3>
+    <div class="box-container">
+      <div class="map-container">
+      <div id="leaflet-map"></div>
+    </div>
+    </div>
+  </div>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />   
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script> 
+  
+  <script src="/js/map/leaflet-heat.js"></script>
+  <script src="/js/map/utils.js"></script>
+  <script src="/js/map/draw-tratti.js"></script>
+  <script src="/js/map/canvas-overlay.js"></script>
+  <script src="/js/map/map-traffico.js"></script>
+  <script src="/js/map/map-loader.js"></script>
+  <script src="/js/map/main.js"></script>
+
+</div>

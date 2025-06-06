@@ -1,0 +1,32 @@
+<div class="navbar">
+    <link rel="stylesheet" href="/css/navbar.css">
+
+    <div class="navbar-brand">
+        <h1>StreetWise</h1>
+    </div>
+    <div>
+        <input type="text" id="search-city" value="Trento">
+    </div>
+
+    <% if (typeof user !== 'undefined' && user) { %>
+        <div class="user-info">
+            <span>Benvenuto, <%= user.username %>!</span>
+            <% if (user.role === 'admin') { %>
+                <a href="/admin" class="btn btn-admin">Pannello Admin</a>
+            <% } %>
+            <a href="/dashboard" class="btn btn-dashboard">Dashboard</a>
+            <a href="/logout" class="btn btn-logout">Logout</a>
+        </div>
+    <% } else { %>
+        <button class="login-btn" id="loginToggleBtn">LOGIN</button>
+        <div id="login-dropdown" class="login-dropdown hidden">
+            <form id="loginForm" action="/api/auth/login-form" method="POST">
+                <input type="email" name="email" id="login-email" placeholder="📧 Email" required />
+                <input type="password" name="password" id="login-password" placeholder="🔒 Password" required />
+                <button type="submit">Accedi</button>
+            </form>
+        </div>
+    <% } %>
+    
+    <script src="/js/navbar.js"></script>
+</div>

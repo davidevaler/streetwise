@@ -42,7 +42,7 @@ window.utils = {
 
   // Converte coordinate (auto-rilevamento sistema) in WGS84
   convertToWGS84: function(x, y) {
-    const coordinateSystem = window.utils.detectCoordinateSystem(x);
+    const coordinateSystem = window.utils.detectCoordinateSystem(y);
     const coordX = parseFloat(x);
     const coordY = parseFloat(y);
     
@@ -59,7 +59,7 @@ window.utils = {
     
     const [lat, lon] = conversion;
     const point = map.latLngToContainerPoint([lat, lon]);
-
+    console.log(point.x);
     return [point.x, point.y];
   },
 

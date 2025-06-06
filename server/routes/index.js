@@ -6,7 +6,7 @@ const { protect, authorizeRoles } = require('../controllers/authMiddleware'); //
 
 // pagina principale x utente non autenticato
 router.get('/', (req, res) => {
-    res.render('/', { error: null });
+    res.render('base', { error: null });
 });
 
 

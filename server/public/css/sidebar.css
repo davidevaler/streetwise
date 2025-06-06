@@ -1,0 +1,263 @@
+.sidebar {
+  background: #f1f1f1;
+  border-radius: 15px;
+  min-width: 20vw;
+}
+
+    .sidebar h3 {
+      color: #282c34;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      padding-left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .sidebar h3::before {
+      font-size: 1.2em;
+    }
+    
+    .sidebar ul {
+      list-style: none;
+    }
+    
+    .sidebar li {
+      margin-bottom: 15px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .sidebar li:hover {
+      background: #e9ecef;
+      transform: translateX(5px);
+    }
+    
+    .sidebar label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      color: #282c34;
+    }
+    
+    .sidebar input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #667eea;
+      cursor: pointer;
+    }
+
+    /* Stili per il sottofiltro */
+    .subfilter {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f1f3f4;
+      border-radius: 8px;
+      border-left: 3px solid #667eea;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+    }
+    
+    .subfilter.visible {
+      max-height: 100px;
+      opacity: 1;
+      margin-top: 12px;
+    }
+    
+    .subfilter.hidden {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0;
+      padding: 0 12px;
+    }
+    
+    .subfilter label {
+      font-size: 0.9em;
+      color: #555;
+      font-weight: normal;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    
+    .subfilter select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background: white;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+    }
+    
+    .subfilter select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+      }
+      
+      .navbar h1 {
+        font-size: 1.5em;
+      }
+      
+      .login-dropdown {
+        position: relative;
+        right: auto;
+        top: auto;
+        margin-top: 15px;
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .login-dropdown::before {
+        display: none;
+      }
+      
+      .sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      
+      .map-container {
+        min-height: 400px;
+      }
+    }
+    
+    /* Animazioni */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .container > * {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    .sidebar li:nth-child(1) { animation-delay: 0.1s; }
+    .sidebar li:nth-child(2) { animation-delay: 0.2s; }
+    .sidebar li:nth-child(3) { animation-delay: 0.3s; }
+    
+    /* Effetti hover avanzati */
+    .sidebar li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 3px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 0 3px 3px 0;
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+    
+    .sidebar li {
+      position: relative;
+    }
+    
+    .sidebar li:hover::before {
+      transform: scaleY(1);
+    }
+
+    /* Stili per il pannello traffico */
+    .traffic-info {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .traffic-info h4 {
+      margin: 0 0 10px 0;
+      color: #495057;
+      font-size: 16px;
+    }
+
+    .traffic-summary {
+      margin-bottom: 10px;
+    }
+
+    .traffic-summary div {
+      margin: 5px 0;
+      font-weight: bold;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Stili specifici per i diversi stati del traffico */
+    /* Alternativa con pallini colorati più visibili */
+    .traffic-dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .traffic-dot.green {
+      background-color: #28a745;
+    }
+
+    .traffic-dot.yellow {
+      background-color: #ffc107;
+    }
+
+    .traffic-dot.red {
+      background-color: #dc3545;
+    }
+
+    .traffic-info small {
+      color: #6c757d;
+      font-size: 12px;
+      font-style: italic;
+    }
+
+
+    /* Stili per i popup del traffico */
+    .traffic-popup {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-width: 200px;
+    }
+
+    .traffic-popup h4 {
+      margin: 0 0 10px 0;
+      color: #282c34;
+      font-size: 16px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+    }
+
+    .traffic-popup p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .traffic-popup small {
+      color: #666;
+      font-style: italic;
+    }

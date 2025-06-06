@@ -6,6 +6,35 @@ const { protect, authorizeRoles } = require('../controllers/authMiddleware');
 // LOGIN - rotta pubblica
 router.post('/login', authController.login);
 
+// LOGIN - rotta pubblica
+router.post('/login-form', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await authController.authenticate(email, password);
+    const token = authController.generateToken(user);
+    
+    console.log('User autenticated:');
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 3600000
+    });
+    
+    req.session.toast = { type: 'success', message: 'Login effettuato con successo!'};
+    
+    if (user.role === 'admin') {
+      console.log(process.env.CLIENT_URL);
+      return res.redirect(`${process.env.CLIENT_URL}/admin`);
+    } else {
+      return res.redirect(`${process.env.CLIENT_URL}/`);
+    }
+  } catch (err) {
+    req.session.toast = { type: 'error', message: 'Errore interno' };
+    return res.redirect(process.env.CLIENT_URL);
+  }
+})
+
 // ME - rotta protetta da token
 router.get('/me', protect, (req, res) => {
   res.json({ user: req.user });

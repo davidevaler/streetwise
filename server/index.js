@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const app = express();
 const mongoose = require('mongoose');
@@ -21,6 +22,9 @@ app.use(cors({
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+//usando layouts andiamo a iniettare il codice delle varie pagine dentro a layouts/default.ejs
+app.use(expressLayouts);
+app.set('layout', 'layouts/default'); // Imposta il layout di default per tutte le pagine
 
 // Parsing del body delle richieste (POST/PUT)
 // gestiamo comunicazioni in diversi formati: json (fetch), form, cookies

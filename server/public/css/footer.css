@@ -1,0 +1,18 @@
+footer {
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  padding: 1.2rem; 
+  background-color: #f1f1f1; 
+  color: #282c34; 
+  text-align: center; /* Centra il testo al suo interno */
+  box-sizing: border-box; /* Assicura che il padding sia incluso nella larghezza */
+}
+
+/* Stile per il paragrafo all'interno del footer */
+footer p {
+  margin: 0; /* Rimuove il margine predefinito del paragrafo */
+  font-size: 1.1rem; /* Dimensione del testo più discreta */
+  font-weight: normal; /* Peso del font normale */
+  letter-spacing: 0.025em; /* Leggera spaziatura tra i caratteri */
+}
