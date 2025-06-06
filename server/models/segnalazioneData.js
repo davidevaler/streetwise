@@ -25,6 +25,7 @@ const SegnalazioneDataSchema = new mongoose.Schema({
             x: Number,
             y: Number
         },
+        _id: false,
         required: true
     },
     dataCreazione: {

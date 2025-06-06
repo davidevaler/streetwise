@@ -155,6 +155,10 @@ function resetForm() {
     document.getElementById('submit-btn').disabled = true;
 }
 
+function apiFetch(path, options) {
+  return fetch(`${window.SERVER_URL}${path}`, options);
+}
+
 async function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -180,7 +184,7 @@ async function handleFormSubmit(e) {
             }
         };
 
-        const response = await fetch(`/api/segnalazioni`, {
+        const response = await apiFetch('/api/segnalazioni', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
