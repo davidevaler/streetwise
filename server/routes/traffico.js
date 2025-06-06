@@ -33,32 +33,33 @@ router.get('/', async (req, res) => {
             vialeVeronaNord: { name: "Viale Verona Nord", coords: [11.127673, 46.058231] },
             vialeVeronaSud: { name: "Viale Verona Sud", coords: [11.131125, 46.042258] },
 
-            tangenzialeVersoSud1: { name: "Tangenziale Nord (da NORD a SUD)", coords: [11.109934, 46.095506] },
-            tangenzialeVersoNord1: { name: "Tangenziale Sud (da SUD a NORD)", coords: [11.1152358, 45.9800389] },
+            tangenzialeVersoSud1: { name: "Tangenziale Nord (da NORD a SUD) 1", coords: [11.1227654, 46.0909793] },
+            tangenzialeVersoNord1: { name: "Tangenziale Sud (da SUD a NORD) 1", coords: [11.1152358, 45.9800389] },
             
-            tangenzialeVersoSud2: { name: "Tangenziale (da NORD a SUD)", coords: [11.1041314, 46.0938795] },
-            tangenzialeVersoSud3: { name: "Tangenziale (da NORD a SUD)", coords: [11.1023270, 46.0911030] },
-            tangenzialeVersoSud4: { name: "Tangenziale (da NORD a SUD)", coords: [11.1104551, 46.0843077] },
-            tangenzialeVersoSud5: { name: "Tangenziale (da NORD a SUD)", coords: [11.1123051, 46.0791315] },
-            tangenzialeVersoSud6: { name: "Tangenziale (da NORD a SUD)", coords: [11.112262, 46.074572] },
-            tangenzialeVersoSud7: { name: "Tangenziale (da NORD a SUD)", coords: [11.1109312, 46.0666602] },
-            tangenzialeVersoSud8: { name: "Tangenziale (da NORD a SUD)", coords: [11.1122769, 46.0523560] },
-            tangenzialeVersoSud9: { name: "Tangenziale (da NORD a SUD)", coords: [11.1172843, 46.0440880] },
-            tangenzialeVersoSud10: { name: "Tangenziale (da NORD a SUD)", coords: [11.1250966, 46.0363336] },
-            tangenzialeVersoSud11: { name: "Tangenziale (da NORD a SUD)", coords: [11.1257121, 46.0115092] },
+            tangenzialeVersoSud2: { name: "Tangenziale Nord (da NORD a SUD) 2", coords: [11.109934, 46.095506] },
+            tangenzialeVersoSud3: { name: "Tangenziale (da NORD a SUD) 3", coords: [11.1045565, 46.0940308] },
+            tangenzialeVersoSud4: { name: "Tangenziale (da NORD a SUD) 4", coords: [11.1023270, 46.0911030] },
+            tangenzialeVersoSud5: { name: "Tangenziale (da NORD a SUD) 5", coords: [11.1104551, 46.0843077] },
+            tangenzialeVersoSud6: { name: "Tangenziale (da NORD a SUD) 6", coords: [11.1123051, 46.0791315] },
+            tangenzialeVersoSud7: { name: "Tangenziale (da NORD a SUD) 7", coords: [11.112262, 46.074572] },
+            tangenzialeVersoSud8: { name: "Tangenziale (da NORD a SUD) 8", coords: [11.1109312, 46.0666602] },
+            tangenzialeVersoSud9: { name: "Tangenziale (da NORD a SUD) 9", coords: [11.1122769, 46.0523560] },
+            tangenzialeVersoSud10: { name: "Tangenziale (da NORD a SUD) 10", coords: [11.1175009, 46.0439169] },
+            tangenzialeVersoSud11: { name: "Tangenziale (da NORD a SUD) 11", coords: [11.1250966, 46.0363336] },
+            tangenzialeVersoSud12: { name: "Tangenziale (da NORD a SUD) 12", coords: [11.1257121, 46.0115092] },
         
-            tangenzialeVersoNord2: { name: "Tangenziale (da SUD a NORD)", coords: [11.125981, 46.011833] },
-            tangenzialeVersoNord3: { name: "Tangenziale (da SUD a NORD)", coords: [11.1241109, 46.00079604] },
-            tangenzialeVersoNord4: { name: "Tangenziale (da SUD a NORD)", coords: [11.1271743, 46.0328580] },
-            tangenzialeVersoNord5: { name: "Tangenziale (da SUD a NORD)", coords: [11.1174694, 46.0440470] },
-            tangenzialeVersoNord6: { name: "Tangenziale (da SUD a NORD)", coords: [11.1128030, 46.0504606] },
-            tangenzialeVersoNord7: { name: "Tangenziale (da SUD a NORD)", coords: [11.1114616, 46.0651697] },
-            tangenzialeVersoNord8: { name: "Tangenziale (da SUD a NORD)", coords: [11.1126568, 46.0755321] },
-            tangenzialeVersoNord9: { name: "Tangenziale (da SUD a NORD)", coords: [11.1098056, 46.0847591] },
-            tangenzialeVersoNord10: { name: "Tangenziale (da SUD a NORD)", coords: [11.1022897, 46.0915358] },
+            tangenzialeVersoNord2: { name: "Tangenziale (da SUD a NORD) 2", coords: [11.125981, 46.011833] },
+            tangenzialeVersoNord3: { name: "Tangenziale (da SUD a NORD) 3", coords: [11.1271743, 46.0328580] },
+            tangenzialeVersoNord4: { name: "Tangenziale (da SUD a NORD) 4", coords: [11.1175917, 46.0439460] },
+            tangenzialeVersoNord5: { name: "Tangenziale (da SUD a NORD) 5", coords: [11.1128030, 46.0504606] },
+            tangenzialeVersoNord6: { name: "Tangenziale (da SUD a NORD) 6", coords: [11.1114616, 46.0651697] },
+            tangenzialeVersoNord7: { name: "Tangenziale (da SUD a NORD) 7", coords: [11.1126568, 46.0755321] },
+            tangenzialeVersoNord8: { name: "Tangenziale (da SUD a NORD) 8", coords: [11.1098056, 46.0847591] },
+            tangenzialeVersoNord9: { name: "Tangenziale (da SUD a NORD) 9", coords: [11.1022897, 46.0915358] },
+            tangenzialeVersoNord10: { name: "Tangenziale (da SUD a NORD) 10", coords: [11.114977, 46.096315] },
 
-            tangenzialeVersoSudLast: { name: "Tangenziale Sud (da NORD a SUD)", coords: [11.1151415, 45.9798952] },
-            tangenzialeVersoNordLast: { name: "Tangenziale Nord (da SUD a NORD)", coords: [11.114977, 46.096315] },
+            tangenzialeVersoSudLast: { name: "Tangenziale Sud (da NORD a SUD) Last", coords: [11.1151415, 45.9798952] },
+            tangenzialeVersoNordLast: { name: "Tangenziale Nord (da SUD a NORD) Last", coords: [11.1230628, 46.0903971] },
 
 
             piazzaVeneziaNord: { name: "Piazza Venezia Nord", coords: [11.127852, 46.069873] },
@@ -72,10 +73,8 @@ router.get('/', async (req, res) => {
             viaBrennero1NS: { name: "Via Brennero (da NORD a SUD)", coords: [11.106537, 46.114516] },
             viaBrenneroNordSN: { name: "Via Brennero Nord (da SUD a NORD)", coords: [11.106991, 46.113677] },
             viaBrenneroSudSN: { name: "Via Brennero Sud (da SUD a NORD)", coords: [11.123661, 46.077285] },
-            viaBrenneroNordNS: { name: "Via Brennero Nord (da NORD a SUD)", coords: [11.106760, 46.113675] },
+            viaBrenneroNordNS: { name: "Via Brennero Nord (da NORD a SUD)", coords: [11.106849, 46.113596] },
             viaBrenneroSudNS: { name: "Via Brennero Sud (da NORD a SUD)", coords: [11.123497, 46.077412] },
-            rotatoriaBermax1: { name: "Rotatoria Bermax", coords: [11.106871, 46.113716] },
-            rotatoriaBermax2: { name: "Rotatoria Bermax", coords: [11.106678, 46.114454] },
 
             viaSanFrancesco: { name: "Via San Francesco", coords: [11.126372, 46.067105] },
             viaBarbacovi: { name: "Via Barbacovi", coords: [11.131207, 46.064342] },
@@ -105,8 +104,9 @@ router.get('/', async (req, res) => {
             { from: "viaBrenneroSudSN", to: "stazione", name: "Via Brennero Sud - Stazione" },
             { from: "viaBrennero1SN", to: "lavis", name: "Via Brennero da Sud a Nord" },
             { from: "lavis", to: "viaBrennero1NS", name: "Via Brennero da Nord a Sud" },
-            { from: "rotatoriaBermax1", to: "rotatoriaBermax2", name: "Rotatoria Bermax" },
-            { from: "rotatoriaBermax2", to: "rotatoriaBermax1", name: "Rotatoria Bermax" },
+            
+            { from: "viaBrenneroNordSN", to: "viaBrennero1SN", name: "Rotatoria Bermax" },
+            { from: "viaBrennero1SN", to: "viaBrenneroNordNS", name: "Rotatoria Bermax" },
 
             { from: "viaDruso", to: "viaPetrarca", name: "Via Druso - Via Petrarca" },
             { from: "vialeVeronaNord", to: "corso3Novembre", name: "Corso 3 Novembre" },
@@ -122,7 +122,10 @@ router.get('/', async (req, res) => {
             { from: "tangenzialeVersoSud8", to: "tangenzialeVersoSud9", name: "Tangenziale da Nord a Sud" },
             { from: "tangenzialeVersoSud9", to: "tangenzialeVersoSud10", name: "Tangenziale da Nord a Sud" },
             { from: "tangenzialeVersoSud10", to: "tangenzialeVersoSud11", name: "Tangenziale da Nord a Sud" },
-            { from: "tangenzialeVersoSud11", to: "tangenzialeVersoSudLast", name: "Tangenziale da Nord a Sud" },
+            { from: "tangenzialeVersoSud11", to: "tangenzialeVersoSud12", name: "Tangenziale da Nord a Sud" },
+            { from: "tangenzialeVersoSud12", to: "tangenzialeVersoSudLast", name: "Tangenziale da Nord a Sud" },
+            
+            
 
             { from: "tangenzialeVersoNord1", to: "tangenzialeVersoNord2", name: "Tangenziale da Sud a Nord" },
             { from: "tangenzialeVersoNord2", to: "tangenzialeVersoNord3", name: "Tangenziale da Sud a Nord" },
@@ -134,7 +137,9 @@ router.get('/', async (req, res) => {
             { from: "tangenzialeVersoNord8", to: "tangenzialeVersoNord9", name: "Tangenziale da Sud a Nord" },
             { from: "tangenzialeVersoNord9", to: "tangenzialeVersoNord10", name: "Tangenziale da Sud a Nord" },
             { from: "tangenzialeVersoNord10", to: "tangenzialeVersoNordLast", name: "Tangenziale da Sud a Nord" },
-{ from: "viaBarbacovi", to: "viaGrazioli", name: "Via Giovanelli - Via Grazioli" },
+
+            { from: "viaSanFrancesco", to: "viaBarbacovi", name: "Via San Francesco - Via Barbacovi" },
+            { from: "viaBarbacovi", to: "viaGrazioli", name: "Via Giovanelli - Via Grazioli" },
             { from: "viaPerini1", to: "viaPerini2", name: "Via Perini" },
             { from: "viaGocciadoro1", to: "viaGocciadoro2", name: "Via Gocciadoro" },
             { from: "viaOrsi", to: "viaPasubio", name: "Via Orsi - Via Pasubio" },
@@ -199,7 +204,7 @@ router.get('/', async (req, res) => {
             }
             
             // Piccola pausa per non sovraccaricare l'API
-            await new Promise(resolve => setTimeout(resolve, 100));
+            //await new Promise(resolve => setTimeout(resolve, 300));
         }
 
         res.json({

@@ -48,7 +48,8 @@ window.loadAllMapData = async function(map, idCitta) {
 
       // Se l'anno è tra 2002 e 2006 inclusi, usa convertToWGS84
       if (["2002","2003","2004","2005","2006"].includes(anno.toString())) {
-        coords = convertToWGS84(pos.x, pos.y);
+        //coords = convertToWGS84(pos.x, pos.y);
+        coords = proj4(utm32N, proj4.WGS84, [parseFloat(pos.x), parseFloat(pos.y)]);
       } else {
         coords = proj4(utm32N, proj4.WGS84, [parseFloat(pos.x), parseFloat(pos.y)]);
       }

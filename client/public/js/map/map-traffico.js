@@ -85,6 +85,7 @@ function updateTrafficDisplay() {
     });
 }
 
+
 // Converte il livello di traffico in testo leggibile
 function getTrafficStatusText(level) {
     switch (level) {
