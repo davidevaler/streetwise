@@ -1,7 +1,10 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-// Middleware per verificare il token JWT (protect)
+/*
+* Middleware per verificare il token JWT (protect)
+* se JWT è valido, aggiunge i dati dell'utente a req.user
+*/
 const protect = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -24,7 +27,11 @@ const protect = async (req, res, next) => {
   }
 };
 
-// Middleware per autorizzare ruoli specifici
+/*
+*  Middleware per autorizzare ruoli specifici
+*  se il ruolo dell'utente è in roles => prosegui
+*  else: blocca
+*/
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
