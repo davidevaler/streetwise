@@ -19,8 +19,6 @@ async function loadCitta(map, nomeCitta) {
         map.setMaxZoom(parseInt(citta.zoom.max));
         map.setMaxBounds(bounds, maxBoundsViscosity=0.9);
 
-        console.log(citta.pos.x);
-
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
@@ -30,8 +28,10 @@ async function loadCitta(map, nomeCitta) {
 
 };
 
+let map;
+
 document.addEventListener('DOMContentLoaded', function() {
-  const map = L.map('leaflet-map');
+  map = L.map('leaflet-map');
   const nomeCittaInput = document.getElementById('search-city');
   loadCitta(map, nomeCittaInput.value);
 

@@ -9,13 +9,12 @@
     </div>
 
     <% if (typeof user !== 'undefined' && user) { %>
-        <div class="user-info">
-            <span>Benvenuto, <%= user.username %>!</span>
+        <div>
             <% if (user.role === 'admin') { %>
-                <a href="/admin" class="btn btn-admin">Pannello Admin</a>
+                <a href="/admin" class="login-btn">Pannello Admin</a>
+                <a href="/dashboard" class="login-btn">Dashboard</a>
             <% } %>
-            <a href="/dashboard" class="btn btn-dashboard">Dashboard</a>
-            <a href="/logout" class="btn btn-logout">Logout</a>
+            <a href="/logout" class="login-btn">LOGOUT</a>
         </div>
     <% } else { %>
         <button class="login-btn" id="loginToggleBtn">LOGIN</button>

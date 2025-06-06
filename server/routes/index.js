@@ -28,7 +28,7 @@ router.get('/logout', (req, res) => {
             console.error('Errore durante la distruzione della sessione:', err);
             return res.status(500).send('Errore logout');
         }
-        res.redirect('/');      // Reindirizza alla pagina base
+        res.redirect(process.env.CLIENT_URL);      // Reindirizza alla pagina base
     });
 });
 

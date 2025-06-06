@@ -10,17 +10,18 @@ const generateToken = (user) => {
   );
 };
 
-exports.authenticate = async (email, password) => {
+const authenticate = async (email, password) => {
   const user = await User.findOne({ email });
 
   if (!user || !(await user.matchPassword(password))) {
+    console.error('credenziali non valide');
     throw new Error('Credenziali non valide');
   }
   return user;
 };
 
 // Controller per il login
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   console.log("login() chiamato - body ricevuto:", req.body);  // <-- DEBUG
 
   const { email, password } = req.body;
@@ -56,3 +57,9 @@ exports.login = async (req, res) => {
     return res.status(500).json({ message: "Errore del server" });
   }
 };
+
+module.exports = {
+  generateToken,
+  authenticate,
+  login
+}

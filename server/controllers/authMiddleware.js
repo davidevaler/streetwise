@@ -7,7 +7,7 @@ const User = require('../models/user');
 */
 const protect = async (req, res, next) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+    const token = req.cookies.token;
     
     if (!token) {
       return res.status(401).json({ message: 'Token mancante' });
@@ -19,7 +19,6 @@ const protect = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ message: 'Utente non trovato' });
     }
-
     req.user = user;
     next();
   } catch (error) {
@@ -33,12 +32,23 @@ const protect = async (req, res, next) => {
 *  else: blocca
 */
 const authorizeRoles = (...roles) => {
-  return (req, res, next) => {
-    if (!req.user) {
-      return res.status(401).json({ message: 'Utente non autenticato' });
+  return async (req, res, next) => {
+    const token = req.cookies.token;
+    if (!token) {
+      res.redirect('error');
+      return res.status(401).json({ message: 'Token mancante' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      res.redirect('error');
+      return res.status(401).json({ message: 'Utente non trovato' });
     }
     
-    if (!roles.includes(req.user.role)) {
+    if (!roles.includes(user.role)) {
+      res.redirect('error');
       return res.status(403).json({ 
         message: `Accesso negato. Ruolo richiesto: ${roles.join(' o ')}` 
       });
@@ -51,9 +61,10 @@ const authorizeRoles = (...roles) => {
 // Middleware specifico per verificare che l'utente sia admin
 const requireAdmin = async (req, res, next) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+    const token = req.cookies.token;
     
     if (!token) {
+      res.redirect('error');
       return res.status(401).json({ message: 'Token mancante' });
     }
 
@@ -61,16 +72,19 @@ const requireAdmin = async (req, res, next) => {
     const user = await User.findById(decoded.id);
 
     if (!user) {
+      res.redirect('error');
       return res.status(401).json({ message: 'Utente non trovato' });
     }
 
     if (user.role !== 'admin') {
+      res.redirect('error');
       return res.status(403).json({ message: 'Accesso negato. Solo admin.' });
     }
 
     req.user = user;
     next();
   } catch (error) {
+    res.redirect('error');
     return res.status(401).json({ message: 'Token non valido' });
   }
 };

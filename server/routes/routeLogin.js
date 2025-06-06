@@ -1,19 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../controllers/authcontroller');
+const { generateToken, authenticate, login } = require('../controllers/authcontroller');
 const { protect, authorizeRoles } = require('../controllers/authMiddleware');
 
 // LOGIN - rotta pubblica
-router.post('/login', authController.login);
+router.post('/login', login);
 
 // LOGIN - rotta pubblica
 router.post('/login-form', async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await authController.authenticate(email, password);
-    const token = authController.generateToken(user);
-    
-    console.log('User autenticated:');
+    const user = await authenticate(email, password);
+    const token = generateToken(user);
 
     res.cookie('token', token, {
       httpOnly: true,
@@ -27,9 +25,10 @@ router.post('/login-form', async (req, res) => {
       console.log(process.env.CLIENT_URL);
       return res.redirect(`${process.env.CLIENT_URL}/admin`);
     } else {
-      return res.redirect(`${process.env.CLIENT_URL}/`);
+      return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
     }
   } catch (err) {
+    console.error(err)
     req.session.toast = { type: 'error', message: 'Errore interno' };
     return res.redirect(process.env.CLIENT_URL);
   }
