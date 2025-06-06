@@ -1,465 +1,465 @@
 * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      overflow-y: hidden;
-      height: 100vh;
-      min-height: 100vh;
-    }
-    
-    .navbar {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      position: relative;
-      z-index: 1000;
-    }
-    
-    .navbar h1 {
-      color: white;
-      font-size: 2em;
-      font-weight: bold;
-    }
-    
-    .navbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .navbar-brand::before {
-      font-size: 1.5em;
-    }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    .navbar input[type="text"] {
-      padding: 10px 15px;
-      border-radius: 25px;
-      border: none;
-      outline: none;
-      font-size: 1em;
-      color: #333;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      width: 220px;
-    }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  overflow-y: auto;
+  min-height: 100vh;
+  padding-top: 70px; /* spazio per navbar fissa */
+}
 
-    .navbar input[type="text"]:focus {
-      background: white;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-    }
+.navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  position: fixed; /* navbar fissa */
+  top: 0;
+  width: 100%;
+  z-index: 1100;
+}
 
-    .login-btn {
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      padding: 10px 20px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-    }
-    
-    .login-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      border-color: rgba(255, 255, 255, 0.5);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-    
-    .login-dropdown {
-      position: absolute;
-      top: 100%;
-      right: 30px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      padding: 25px;
-      min-width: 300px;
-      margin-top: 10px;
-      z-index: 1001;
-      backdrop-filter: blur(10px);
-    }
-    
-    .login-dropdown::before {
-      content: '';
-      position: absolute;
-      top: -8px;
-      right: 20px;
-      width: 0;
-      height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-bottom: 8px solid white;
-    }
-    
-    .login-dropdown.hidden {
-      display: none;
-    }
-    
-    .login-dropdown form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    
-    .login-dropdown input {
-      padding: 12px;
-      border: 2px solid #e1e5e9;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: border-color 0.3s ease;
-    }
-    
-    .login-dropdown input:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-    
-    .login-dropdown button {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-    
-    .login-dropdown button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-    
-    .container {
-      display: flex;
-      height: calc(100vh - 150px);
-      gap: 15px;
-      padding: 15px;
-      box-sizing: border-box;
-      overflow: hidden;
-    }
-    
-    .sidebar {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      padding: 25px;
-      width: 300px;
-      min-width: 300px;
-    }
-    
-    .sidebar h3 {
-      color: #333;
-      font-size: 1.5em;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .sidebar h3::before {
-      font-size: 1.2em;
-    }
-    
-    .sidebar ul {
-      list-style: none;
-    }
-    
-    .sidebar li {
-      margin-bottom: 15px;
-      padding: 15px;
-      background: #f8f9fa;
-      border-radius: 10px;
-      transition: all 0.3s ease;
-    }
-    
-    .sidebar li:hover {
-      background: #e9ecef;
-      transform: translateX(5px);
-    }
-    
-    .sidebar label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      font-weight: 500;
-      color: #333;
-    }
-    
-    .sidebar input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: #667eea;
-      cursor: pointer;
-    }
+.navbar h1 {
+  color: white;
+  font-size: 2em;
+  font-weight: bold;
+}
 
-    /* Stili per il sottofiltro */
-    .subfilter {
-      margin-top: 12px;
-      padding: 12px;
-      background: #f1f3f4;
-      border-radius: 8px;
-      border-left: 3px solid #667eea;
-      transition: all 0.3s ease;
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-    }
-    
-    .subfilter.visible {
-      max-height: 100px;
-      opacity: 1;
-      margin-top: 12px;
-    }
-    
-    .subfilter.hidden {
-      max-height: 0;
-      opacity: 0;
-      margin-top: 0;
-      padding: 0 12px;
-    }
-    
-    .subfilter label {
-      font-size: 0.9em;
-      color: #555;
-      font-weight: normal;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 5px;
-    }
-    
-    .subfilter select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background: white;
-      font-size: 0.9em;
-      cursor: pointer;
-      transition: border-color 0.3s ease;
-    }
-    
-    .subfilter select:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
-    }
-    
-    .wide {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .map-container {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      padding: 20px;
-      height: 100%;
-      overflow: hidden;
-    }
-    
-    #leaflet-map {
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    
-    .bottom {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      padding: 15px;
-      font-size: 1.1em;
-      font-weight: 500;
-      color: #333;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin: 0 15px 15px 15px;
-    }
-    
-    .bottom::before {
-      content: "📢";
-      font-size: 1.3em;
-    }
-    
-    /* Responsive design */
-    @media (max-width: 768px) {
-      .navbar {
-        flex-direction: column;
-        gap: 15px;
-        padding: 15px;
-      }
-      
-      .navbar h1 {
-        font-size: 1.5em;
-      }
-      
-      .login-dropdown {
-        position: relative;
-        right: auto;
-        top: auto;
-        margin-top: 15px;
-        width: 100%;
-        max-width: 300px;
-      }
-      
-      .login-dropdown::before {
-        display: none;
-      }
-      
-      .container {
-        flex-direction: column;
-        height: auto;
-      }
-      
-      .sidebar {
-        width: 100%;
-        margin-bottom: 20px;
-      }
-      
-      .map-container {
-        min-height: 400px;
-      }
-    }
-    
-    /* Animazioni */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .container > * {
-      animation: fadeIn 0.6s ease-out;
-    }
-    
-    .sidebar li:nth-child(1) { animation-delay: 0.1s; }
-    .sidebar li:nth-child(2) { animation-delay: 0.2s; }
-    .sidebar li:nth-child(3) { animation-delay: 0.3s; }
-    
-    /* Effetti hover avanzati */
-    .sidebar li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 3px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 0 3px 3px 0;
-      transform: scaleY(0);
-      transition: transform 0.3s ease;
-    }
-    
-    .sidebar li {
-      position: relative;
-    }
-    
-    .sidebar li:hover::before {
-      transform: scaleY(1);
-    }
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-    /* Stili per il pannello traffico */
-    .traffic-info {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      border: 1px solid #dee2e6;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+.navbar-brand::before {
+  font-size: 1.5em;
+}
 
-    .traffic-info h4 {
-      margin: 0 0 10px 0;
-      color: #495057;
-      font-size: 16px;
-    }
+.navbar input[type="text"] {
+  padding: 10px 15px;
+  border-radius: 25px;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  color: #333;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  width: 220px;
+}
 
-    .traffic-summary {
-      margin-bottom: 10px;
-    }
+.navbar input[type="text"]:focus {
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
 
-    .traffic-summary div {
-      margin: 5px 0;
-      font-weight: bold;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+.login-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
 
-    /* Stili specifici per i diversi stati del traffico */
-    /* Alternativa con pallini colorati più visibili */
-    .traffic-dot {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      margin-right: 8px;
-    }
+.login-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
 
-    .traffic-dot.green {
-      background-color: #28a745;
-    }
+.login-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  padding: 25px;
+  min-width: 300px;
+  margin-top: 10px;
+  z-index: 1001;
+  backdrop-filter: blur(10px);
+}
 
-    .traffic-dot.yellow {
-      background-color: #ffc107;
-    }
+.login-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 20px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid white;
+}
 
-    .traffic-dot.red {
-      background-color: #dc3545;
-    }
+.login-dropdown.hidden {
+  display: none;
+}
 
-    .traffic-info small {
-      color: #6c757d;
-      font-size: 12px;
-      font-style: italic;
-    }
+.login-dropdown form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
+.login-dropdown input {
+  padding: 12px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
 
-    /* Stili per i popup del traffico */
-    .traffic-popup {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      min-width: 200px;
-    }
+.login-dropdown input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
 
-    .traffic-popup h4 {
-      margin: 0 0 10px 0;
-      color: #333;
-      font-size: 16px;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 5px;
-    }
+.login-dropdown button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
 
-    .traffic-popup p {
-      margin: 5px 0;
-      font-size: 14px;
-    }
+.login-dropdown button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
 
-    .traffic-popup small {
-      color: #666;
-      font-style: italic;
-    }
+.container {
+  display: flex;
+  height: calc(100vh - 150px);
+  gap: 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.sidebar {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  padding: 25px;
+  width: 300px;
+  min-width: 300px;
+}
+
+.sidebar h3 {
+  color: #333;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar h3::before {
+  font-size: 1.2em;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  margin-bottom: 15px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.sidebar li:hover {
+  background: #e9ecef;
+  transform: translateX(5px);
+}
+
+.sidebar label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #333;
+}
+
+.sidebar input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #667eea;
+  cursor: pointer;
+}
+
+/* Stili per il sottofiltro */
+.subfilter {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f1f3f4;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+}
+
+.subfilter.visible {
+  max-height: 100px;
+  opacity: 1;
+  margin-top: 12px;
+}
+
+.subfilter.hidden {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  padding: 0 12px;
+}
+
+.subfilter label {
+  font-size: 0.9em;
+  color: #555;
+  font-weight: normal;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.subfilter select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: white;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.subfilter select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.wide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  padding: 20px;
+  height: 100%;
+  overflow: hidden;
+}
+
+#leaflet-map {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.bottom {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  padding: 15px;
+  font-size: 1.1em;
+  font-weight: 500;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 0 15px 15px 15px;
+}
+
+.bottom::before {
+  font-size: 1.3em;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .navbar h1 {
+    font-size: 1.5em;
+  }
+
+  .login-dropdown {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin-top: 15px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .login-dropdown::before {
+    display: none;
+  }
+
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .map-container {
+    min-height: 400px;
+  }
+}
+
+/* Animazioni */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container > * {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.sidebar li:nth-child(1) { animation-delay: 0.1s; }
+.sidebar li:nth-child(2) { animation-delay: 0.2s; }
+.sidebar li:nth-child(3) { animation-delay: 0.3s; }
+
+/* Effetti hover avanzati */
+.sidebar li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0 3px 3px 0;
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.sidebar li {
+  position: relative;
+}
+
+.sidebar li:hover::before {
+  transform: scaleY(1);
+}
+
+/* Stili per il pannello traffico */
+.traffic-info {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.traffic-info h4 {
+  margin: 0 0 10px 0;
+  color: #495057;
+  font-size: 16px;
+}
+
+.traffic-summary {
+  margin-bottom: 10px;
+}
+
+.traffic-summary div {
+  margin: 5px 0;
+  font-weight: bold;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Stili specifici per i diversi stati del traffico */
+/* Alternativa con pallini colorati più visibili */
+.traffic-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.traffic-dot.green {
+  background-color: #28a745;
+}
+
+.traffic-dot.yellow {
+  background-color: #ffc107;
+}
+
+.traffic-dot.red {
+  background-color: #dc3545;
+}
+
+.traffic-info small {
+  color: #6c757d;
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* Stili per i popup del traffico */
+.traffic-popup {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-width: 200px;
+}
+
+.traffic-popup h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+.traffic-popup p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.traffic-popup small {
+  color: #666;
+  font-style: italic;
+}

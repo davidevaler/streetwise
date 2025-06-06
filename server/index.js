@@ -48,6 +48,8 @@ app.use('/api/incidenti', incidentiRoutes);
 const trafficoRoutes = require('./routes/traffico');
 app.use('/api/traffico', trafficoRoutes);
 
+const comunicazioniRoutes = require('./routes/comunicazioni');
+app.use('/api/comunicazioni', comunicazioniRoutes);
 
 app.listen(PORT, () => console.log(`Server in ascolto sulla porta ${PORT}`));
 
