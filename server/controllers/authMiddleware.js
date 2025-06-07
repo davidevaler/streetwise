@@ -10,19 +10,19 @@ const protect = async (req, res, next) => {
     const token = req.cookies.token;
     
     if (!token) {
-      return res.status(401).json({ message: 'Token mancante' });
+      req.session.toast = { message: "Non sei autenticato", tipo: "warning"};
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
 
-    if (!user) {
-      return res.status(401).json({ message: 'Utente non trovato' });
+    if (!user) {      
+      req.session.toast = { message: "Utente non trovato", tipo: "warning"};
     }
     req.user = user;
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Token non valido' });
+    req.session.toast = { message: "Non sei autenticato", tipo: "error"};
   }
 };
 
@@ -35,23 +35,21 @@ const authorizeRoles = (...roles) => {
   return async (req, res, next) => {
     const token = req.cookies.token;
     if (!token) {
-      res.redirect('error');
-      return res.status(401).json({ message: 'Token mancante' });
+      req.session.toast = { message: "Non sei autenticato", tipo: "warning"};
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
 
     if (!user) {
-      res.redirect('error');
-      return res.status(401).json({ message: 'Utente non trovato' });
+      req.session.toast = { message: "Utente non riconosciuto", tipo: "warning"};
     }
     
     if (!roles.includes(user.role)) {
-      res.redirect('error');
-      return res.status(403).json({ 
+      req.session.toast = { 
+        tipo: "warning",
         message: `Accesso negato. Ruolo richiesto: ${roles.join(' o ')}` 
-      });
+      };
     }
     
     next();
@@ -64,28 +62,24 @@ const requireAdmin = async (req, res, next) => {
     const token = req.cookies.token;
     
     if (!token) {
-      res.redirect('error');
-      return res.status(401).json({ message: 'Token mancante' });
+      req.session.toast = { message: "Non sei autenticato", tipo: "warnig"};
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
 
     if (!user) {
-      res.redirect('error');
-      return res.status(401).json({ message: 'Utente non trovato' });
+      req.session.toast = { message: "Utente non riconosciuto", tipo: "warning"};
     }
 
     if (user.role !== 'admin') {
-      res.redirect('error');
-      return res.status(403).json({ message: 'Accesso negato. Solo admin.' });
+      req.session.toast = { message: "Accesso negato, non sei Admin", tipo: "warning"};
     }
 
     req.user = user;
     next();
   } catch (error) {
-    res.redirect('error');
-    return res.status(401).json({ message: 'Token non valido' });
+    req.session.toast = { message: "Non sei autenticato", tipo: "warning"};
   }
 };
 

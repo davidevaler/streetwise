@@ -30,14 +30,13 @@ const login = async (req, res) => {
 
     if (!user) {
       req.session.toast = { message: "Utente non trovato", tipo: "warning" };
-      return res.status(404).json({ message: "Utente non trovato" });
+      res.redirect('base')
     }
 
     const passwordMatch = await user.matchPassword(password);
     if (!passwordMatch) {
-      console.log("Password errata");
       req.session.toast = { message: "Password non valida", tipo: "warning" };
-      return res.status(401).json({ message: "Password errata" });
+      res.redirect('base')
     }
 
     const token = generateToken(user);

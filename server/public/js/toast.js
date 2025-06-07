@@ -1,15 +1,12 @@
-function showToast(message, tipo = 'info', lifeSpan = 3000) {
-  const toastContainer = document.getElementById('toast-container');
-  if (!toastContainer) {
+function showToast(message="", tipo = 'invisible', lifeSpan = 3000) {
+  const toast = document.getElementById('toast');
+  if (!toast) {
     console.error('Toast container not found!');
     return;
   }
 
-  const toast = document.createElement('div');
-  toast.className = `toast ${tipo}`;
+  toast.className = `toast toast-${tipo}`;
   toast.textContent = message;
-
-  toastContainer.appendChild(toast);
 
   setTimeout(() => {
     toast.style.opacity = '1';
@@ -18,8 +15,12 @@ function showToast(message, tipo = 'info', lifeSpan = 3000) {
   setTimeout(() => {
     toast.style.opacity = '0';
     toast.addEventListener('transitionend', () => {
-      toast.remove();
+      toast.className = 'toast-invisible';
+      toast.textContent = "";
+      toast.style.opacity = 0;
     }, { once: true });
   }, lifeSpan);
 }
+
+
 

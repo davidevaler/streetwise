@@ -5,7 +5,7 @@ const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const app = express();
 const mongoose = require('mongoose');
-const cors = require('cors'); // Anche se non strettamente necessario per l'unica origine, non fa male
+const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
@@ -52,6 +52,12 @@ app.use(session({
 // Middleware per le notifiche //finire implementazione
 app.use((req, res, next) => {
   res.locals.toast = req.session.toast;
+  if (!(req.session.toast)) {
+    req.session.toast = {
+      message: '',
+      tipo: 'invisible',
+    };
+  }
   delete req.session.toast;
   next();
 });

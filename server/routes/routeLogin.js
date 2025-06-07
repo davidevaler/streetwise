@@ -10,7 +10,18 @@ router.post('/login', login);
 router.post('/login-form', async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await authenticate(email, password);
+    let user;
+    try { 
+      user = await authenticate(email, password); }
+    catch(error) {
+      //Autenticazione non andata a buon fine
+      req.session.toast = { 
+        message: "Autenticazione non riuscita",
+        tipo: "error"
+      };
+      return res.redirect(process.env.CLIENT_URL);
+
+    }
     const token = generateToken(user);
 
     res.cookie('token', token, {
