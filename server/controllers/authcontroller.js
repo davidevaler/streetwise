@@ -14,7 +14,6 @@ const authenticate = async (email, password) => {
   const user = await User.findOne({ email });
 
   if (!user || !(await user.matchPassword(password))) {
-    console.error('credenziali non valide');
     throw new Error('Credenziali non valide');
   }
   return user;
@@ -30,18 +29,18 @@ const login = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      console.log("Utente non trovato");
+      req.session.toast = { message: "Utente non trovato", tipo: "warning" };
       return res.status(404).json({ message: "Utente non trovato" });
     }
 
     const passwordMatch = await user.matchPassword(password);
     if (!passwordMatch) {
       console.log("Password errata");
+      req.session.toast = { message: "Password non valida", tipo: "warning" };
       return res.status(401).json({ message: "Password errata" });
     }
 
     const token = generateToken(user);
-    console.log("Login OK, token generato");
 
     return res.json({
       token,

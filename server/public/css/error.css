@@ -1,0 +1,35 @@
+.error-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+}
+.error-container h1 {
+  color: #d33;
+  margin-bottom: 20px;
+}
+.error-message {
+  background-color: #ffebeb;
+  border: 1px solid #ffaaaa;
+  color: #cc0000; 
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-size: 1.1em;
+  word-wrap: break-word; /* Assicura che i messaggi lunghi vadano a capo */
+}
+.error-type {
+  font-style: italic;
+  color: #666;
+  margin-top: 15px;
+}
+.error-container a {
+  color: #007bff;
+  text-decoration: none;
+}
+.error-container a:hover {
+  text-decoration: underline;
+}

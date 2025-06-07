@@ -12,11 +12,11 @@ router.get('/', async (req, res) => {
     }
 
     try {
-        const data = await CittaData.find({ nome: nome });
+        const data = await CittaData.findOne({ nome: nome });
         res.json(data);
     } catch (err) {
         console.error(err);
-        res.status(500).send('Server Error');
+        res.status(500).render('error', { message: '500 - Errore interno del server', statusCode: 500 });
     }
 });
 

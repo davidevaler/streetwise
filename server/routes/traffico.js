@@ -8,8 +8,9 @@ router.get('/', async (req, res) => {
         const API_KEY = process.env.OPENROUTE_API_KEY;
         
         if (!API_KEY) {
-            return res.status(500).json({ 
-                error: 'API Key OpenRouteService non configurata' 
+            res.status(500).render('error', { 
+                message: '500 - Errore interno del server \n API Key OpenRouteService non configurata', 
+                statusCode: 500 
             });
         }
 
@@ -134,7 +135,7 @@ router.get('/', async (req, res) => {
             { from: "tangenzialeVersoNord8", to: "tangenzialeVersoNord9", name: "Tangenziale da Sud a Nord" },
             { from: "tangenzialeVersoNord9", to: "tangenzialeVersoNord10", name: "Tangenziale da Sud a Nord" },
             { from: "tangenzialeVersoNord10", to: "tangenzialeVersoNordLast", name: "Tangenziale da Sud a Nord" },
-{ from: "viaBarbacovi", to: "viaGrazioli", name: "Via Giovanelli - Via Grazioli" },
+            { from: "viaBarbacovi", to: "viaGrazioli", name: "Via Giovanelli - Via Grazioli" },
             { from: "viaPerini1", to: "viaPerini2", name: "Via Perini" },
             { from: "viaGocciadoro1", to: "viaGocciadoro2", name: "Via Gocciadoro" },
             { from: "viaOrsi", to: "viaPasubio", name: "Via Orsi - Via Pasubio" },
@@ -217,9 +218,9 @@ router.get('/', async (req, res) => {
 
     } catch (error) {
         console.error('Errore nel recupero dati traffico:', error);
-        res.status(500).json({ 
-            error: 'Errore interno del server',
-            details: error.message 
+        res.status(500).render('error', { 
+            message: '500 - Errore interno del server', 
+            statusCode: 500 
         });
     }
 });

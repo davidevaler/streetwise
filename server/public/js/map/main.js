@@ -1,11 +1,9 @@
 //Setta la mappa
 async function loadCitta(map, nomeCitta) {
-
+  try{
     fetchDataField('citta', 'nome', nomeCitta).then(citta => {
-        citta = citta[0];
         if (!citta) {
             showToast("La città non è presente nei DataBase di StreetWise", tipo='warning', lifeSpan= 3000);
-            //alert("La città non è presente nei DataBase di StreetWise");
             return;
         }
 
@@ -26,7 +24,9 @@ async function loadCitta(map, nomeCitta) {
 
         loadAllMapData(map, citta.id);
     });
-
+  } catch(err) {
+    showToast(message=err, tipo='error');
+  }
 };
 
 let map;

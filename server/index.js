@@ -94,13 +94,13 @@ app.use('/', viewsRouter);  //Tutte le richieste non API
 
 //gestione errori
 app.use((req, res, next) => {
-  res.status(404).render('error', { message: '404 - Pagina non trovata' });
+  res.status(404).render('error', { message: '404 - Pagina non trovata', statusCode: 404 });
 });
 
 //gestione altr errori
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).render('error', { message: '500 - Errore interno del server' });
+  res.status(500).render('error', { message: '500 - Errore interno del server', statusCode: 500 });
 });
 
 //Avvio server

@@ -26,6 +26,7 @@ router.get('/logout', (req, res) => {
     req.session.destroy((err) => {      // Distruggi anche la sessione
         if (err) {
             console.error('Errore durante la distruzione della sessione:', err);
+            req.session.toast = { message: "Errore Log-out, riprova", tipo: "error" };
             return res.status(500).send('Errore logout');
         }
         res.redirect(process.env.CLIENT_URL);      // Reindirizza alla pagina base

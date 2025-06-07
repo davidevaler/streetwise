@@ -1,3 +1,23 @@
-<body>
-    <h1> 404 pagina non trovata</h1>
-</body>
+<div>
+    <link rel="stylesheet" href="/css/error.css">
+    <div class="error-container">
+        <h1>Ops! C'è stato un errore.</h1>
+
+        <% if (message) { %>
+            <div class="error-message">
+                <%= message %>
+            </div>
+        <% } else { %>
+            <div class="error-message">
+                Non siamo riusciti a elaborare la tua richiesta. Riprova più tardi.
+            </div>
+        <% } %>
+
+        <% if (statusCode) { %>
+            <p class="error-type">Stato di errore: <%= statusCode %></p>
+        <% } %>
+
+        <p><a href="/">Torna alla Home</a></p>
+    </div>
+    
+</div>

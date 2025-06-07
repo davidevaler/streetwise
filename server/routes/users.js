@@ -10,7 +10,7 @@ router.get('/', requireAdmin, async (req, res) => {
     res.json(users);
   } catch (error) {
     console.error('Errore nel caricamento utenti:', error);
-    res.status(500).json({ message: 'Errore del server' });
+    res.status(500).render('error', { message: '500 - Errore interno del server', statusCode: 500 });
   }
 });
 
@@ -24,7 +24,7 @@ router.get('/:id', requireAdmin, async (req, res) => {
     res.json(user);
   } catch (error) {
     console.error('Errore nel caricamento utente:', error);
-    res.status(500).json({ message: 'Errore del server' });
+    res.status(500).render('error', { message: '500 - Errore interno del server', statusCode: 500 });
   }
 });
 
@@ -35,16 +35,19 @@ router.post('/', requireAdmin, async (req, res) => {
 
     // Validazione
     if (!email || !password) {
+      req.session.toast = {message: 'Email e password sono obbligatori', 'tipo': 'warning'};
       return res.status(400).json({ message: 'Email e password sono obbligatori' });
     }
 
     if (password.length < 8) {
+      req.session.toast = {message: 'La password deve avere almeno 8 caratteri', 'tipo': 'warning'};
       return res.status(400).json({ message: 'La password deve avere almeno 8 caratteri' });
     }
 
     // Controlla se l'utente esiste già
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      req.session.toast = {message: "L'utente esiste già", 'tipo': 'warning'};
       return res.status(400).json({ message: 'Utente già esistente' });
     }
 
@@ -67,7 +70,7 @@ router.post('/', requireAdmin, async (req, res) => {
     res.status(201).json(userResponse);
   } catch (error) {
     console.error('Errore nella creazione utente:', error);
-    res.status(500).json({ message: 'Errore del server' });
+    res.status(500).render('error', { message: '500 - Errore interno del server', statusCode: 500 });
   }
 });
 
@@ -102,7 +105,7 @@ router.put('/:id', requireAdmin, async (req, res) => {
     res.json(userResponse);
   } catch (error) {
     console.error('Errore nell\'aggiornamento utente:', error);
-    res.status(500).json({ message: 'Errore del server' });
+    res.status(500).render('error', { message: '500 - Errore interno del server', statusCode: 500 });
   }
 });
 
@@ -124,7 +127,7 @@ router.delete('/:id', requireAdmin, async (req, res) => {
     res.json({ message: 'Utente eliminato con successo' });
   } catch (error) {
     console.error('Errore nell\'eliminazione utente:', error);
-    res.status(500).json({ message: 'Errore del server' });
+    res.status(500).render('error', { message: '500 - Errore interno del server', statusCode: 500 });
   }
 });
 
