@@ -1,0 +1,14 @@
+<div>
+  <link rel="stylesheet" href="/css/toast.css">
+  <div id="toast-container">
+  </div>
+
+  <% if (toast) { %>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        showToast('<%= toast.message %>', '<%= toast.type %>');
+      });
+    </script>
+  <% } %>
+  <script src="/js/toast.js"></script>
+</div>

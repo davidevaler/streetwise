@@ -4,7 +4,8 @@ async function loadCitta(map, nomeCitta) {
     fetchDataField('citta', 'nome', nomeCitta).then(citta => {
         citta = citta[0];
         if (!citta) {
-            alert("La città non è presente nei DataBase di StreetWise");
+            showToast("La città non è presente nei DataBase di StreetWise", tipo='warning', lifeSpan= 3000);
+            //alert("La città non è presente nei DataBase di StreetWise");
             return;
         }
 
