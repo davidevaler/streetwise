@@ -2,7 +2,7 @@ window.utils = {
   //fetchData
   fetchData: async function(endpoint) {
     try {
-      const response = await fetch(`/api/${endpoint}`);
+      const response = await fetch(`${SERVER_URL}/api/${endpoint}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch /api/${endpoint}: ${response.statusText}`);
       }
@@ -15,7 +15,7 @@ window.utils = {
 
   fetchDataField: async function (endpoint, field, value) {
     try {
-      const response = await fetch(`/api/${endpoint}?${field}=${encodeURIComponent(value)}`);
+      const response = await fetch(`${SERVER_URL}/api/${endpoint}?${field}=${encodeURIComponent(value)}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch /api/${endpoint}: ${response.statusText}`);
       }

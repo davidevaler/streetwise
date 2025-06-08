@@ -8,11 +8,9 @@
     
     <div class="user-info">
       <h2>📧 Informazioni Utente</h2>
-      <% if (typeof user !== 'undefined' && user) { %>
-        <p><strong>Email:</strong> <span id="user-email"><%- user.email %></span></p>
-        <p><strong>Ruolo:</strong> <span id="user-role"><%- user.role %></span></p>
-        <p><strong>ID:</strong> <span id="user-id"><%- user.id %></span></p>
-      <% } %>
+      <p><strong>Email:</strong> <span id="user-email">Caricamento...</span></p>
+      <p><strong>Ruolo:</strong> <span id="user-role">Caricamento...</span></p>
+      <p><strong>ID:</strong> <span id="user-id">Caricamento...</span></p>
     </div>
     
     <div class="admin-stats">
@@ -61,6 +59,11 @@
         </table>
       </div>
     </div>
+    
+    <div style="text-align: center; margin-top: 30px;">
+      <a href="/" class="btn btn-secondary">← Torna alla Mappa</a>
+      <button class="btn btn-danger" onclick="logout()">🚪 Logout</button>
+    </div>
   </div>
 
   <!-- Modal per aggiungere/modificare utente -->
@@ -91,5 +94,6 @@
       </form>
     </div>
   </div>
+  <script src="/js/config.js"></script>
   <script src="/js/admin.js"></script>
 </div>

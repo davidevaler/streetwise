@@ -29,6 +29,32 @@
           </div>
       </li>
       <li>
+        <label for="filtroTrasporti">
+          <input type="checkbox" id="filtroTrasporti" name="filtroTrasporti">
+          🚌 Trasporti Pubblici
+        </label>
+        <!-- Sottofiltri per i trasporti -->
+        <div id="subfilter-trasporti" class="subfilter hidden">
+          <label for="filtroLinea">
+            🚍 Linea:
+            <select id="filtroLinea" name="filtroLinea">
+              <option value="all">Tutte le linee</option>
+              <!-- Le opzioni verranno popolate dinamicamente -->
+            </select>
+          </label>
+          <div class="time-filters">
+            <label for="filtroOraInizio">
+              🕐 Da:
+              <input type="time" id="filtroOraInizio" name="filtroOraInizio">
+            </label>
+            <label for="filtroOraFine">
+              🕐 A:
+              <input type="time" id="filtroOraFine" name="filtroOraFine">
+            </label>
+          </div>
+        </div>
+      </li>
+      <li>
         <label for="filtroTraffico">
           <input type="checkbox" id="filtroTraffico" name="filtroTraffico">
           🚗 Traffico in Tempo Reale
@@ -41,6 +67,13 @@
       <h4>📊 Stato Traffico</h4>
       <div id="traffic-summary"></div>
       <small id="traffic-last-update"></small>
+    </div>
+
+    <!-- Pannello info trasporti -->
+    <div id="transport-info" class="transport-info" style="display: none;">
+      <h4>🚌 Info Trasporti</h4>
+      <div id="transport-summary"></div>
+      <small>💡 Le fermate sono visibili solo con zoom elevato</small>
     </div>
     </div>
   </div>
@@ -63,6 +96,7 @@
   <script src="/js/map/draw-tratti.js"></script>
   <script src="/js/map/canvas-overlay.js"></script>
   <script src="/js/map/map-traffico.js"></script>
+  <script src="/js/map/map-trasporti.js"></script>
   <script src="/js/map/map-loader.js"></script>
   <script src="/js/map/main.js"></script>
 

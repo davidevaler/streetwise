@@ -22,7 +22,13 @@ async function loadCitta(map, nomeCitta) {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
+        // Carica tutti i dati della mappa inclusi i trasporti
         loadAllMapData(map, citta.id);
+        
+        // Carica specificamente i dati dei trasporti
+        if (typeof window.loadTrasportiData === 'function') {
+            loadTrasportiData(map, citta.id);
+        }
     });
   } catch(err) {
     showToast(message=err, tipo='error');
