@@ -11,18 +11,20 @@ const protect = async (req, res, next) => {
     
     if (!token) {
       req.session.toast = { message: "Non sei autenticato", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
     }
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
 
     if (!user) {      
       req.session.toast = { message: "Utente non trovato", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
     }
     req.user = user;
     next();
   } catch (error) {
-    req.session.toast = { message: "Non sei autenticato", tipo: "error"};
+    req.session.toast = { message: "Errore di accesso", tipo: "error"};
+    return res.redirect(process.env.CLIENT_URL_HTTPS);
   }
 };
 
@@ -36,6 +38,7 @@ const authorizeRoles = (...roles) => {
     const token = req.cookies.token;
     if (!token) {
       req.session.toast = { message: "Non sei autenticato", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -43,6 +46,7 @@ const authorizeRoles = (...roles) => {
 
     if (!user) {
       req.session.toast = { message: "Utente non riconosciuto", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
     }
     
     if (!roles.includes(user.role)) {
@@ -50,6 +54,7 @@ const authorizeRoles = (...roles) => {
         tipo: "warning",
         message: `Accesso negato. Ruolo richiesto: ${roles.join(' o ')}` 
       };
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
     }
     
     next();
@@ -63,6 +68,7 @@ const requireAdmin = async (req, res, next) => {
     
     if (!token) {
       req.session.toast = { message: "Non sei autenticato", tipo: "warnig"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -70,16 +76,19 @@ const requireAdmin = async (req, res, next) => {
 
     if (!user) {
       req.session.toast = { message: "Utente non riconosciuto", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
     }
 
     if (user.role !== 'admin') {
       req.session.toast = { message: "Accesso negato, non sei Admin", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
     }
 
     req.user = user;
     next();
   } catch (error) {
-    req.session.toast = { message: "Non sei autenticato", tipo: "warning"};
+    req.session.toast = { message: "Errore di accesso", tipo: "warning"};
+          return res.redirect(process.env.CLIENT_URL_HTTPS);
   }
 };
 

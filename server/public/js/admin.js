@@ -2,17 +2,8 @@ let currentEditingUserId = null;
 let allUsers = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Controlla se l'utente è loggato e è admin
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-      
-      // Mostra informazioni utente
-  document.getElementById('user-email').textContent = user.email;
-  document.getElementById('user-role').textContent = user.role;
-  document.getElementById('user-id').textContent = user.id;
-      
   // Carica gli utenti
   await loadUsers();
-
   // Setup form submit
   document.getElementById('userForm').addEventListener('submit', handleUserSubmit);
 });
@@ -20,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadUsers() {
   const token = localStorage.getItem('token');
   try {
-    const response = await fetch(`${SERVER_URL}/api/users`, {
+    const response = await fetch(`/api/users`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -120,7 +111,7 @@ async function loadUsers() {
         
         if (currentEditingUserId) {
           // Modifica utente esistente
-          response = await fetch(`${SERVER_URL}/api/users/${currentEditingUserId}`, {
+          response = await fetch(`/api/users/${currentEditingUserId}`, {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -134,7 +125,7 @@ async function loadUsers() {
             alert('La password è obbligatoria per i nuovi utenti');
             return;
           }
-          response = await fetch(`${SERVER_URL}/api/users`, {
+          response = await fetch(`/api/users`, {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -169,7 +160,7 @@ async function loadUsers() {
       const token = localStorage.getItem('token');
       
       try {
-        const response = await fetch(`${SERVER_URL}/api/users/${userId}`, {
+        const response = await fetch(`/api/users/${userId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,

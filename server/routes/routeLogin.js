@@ -4,9 +4,6 @@ const { generateToken, authenticate, login } = require('../controllers/authcontr
 const { protect, authorizeRoles } = require('../controllers/authMiddleware');
 
 // LOGIN - rotta pubblica
-router.post('/login', login);
-
-// LOGIN - rotta pubblica
 router.post('/login-form', async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -19,7 +16,7 @@ router.post('/login-form', async (req, res) => {
         message: "Autenticazione non riuscita",
         tipo: "error"
       };
-      return res.redirect(process.env.CLIENT_URL);
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
 
     }
     const token = generateToken(user);
@@ -33,14 +30,14 @@ router.post('/login-form', async (req, res) => {
     req.session.toast = { tipo: 'success', message: 'Login effettuato con successo!'};
     
     if (user.role === 'admin') {
-      return res.redirect(`${process.env.CLIENT_URL}/admin`);
+      return res.redirect(`${process.env.CLIENT_URL_HTTPS}/admin`);
     } else {
-      return res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+      return res.redirect(`${process.env.CLIENT_URL_HTTPS}/dashboard`);
     }
   } catch (err) {
     console.error(err)
     req.session.toast = { tipo: 'error', message: 'Errore interno' };
-    return res.redirect(process.env.CLIENT_URL);
+    return res.redirect(process.env.CLIENT_URL_HTTPS);
   }
 })
 
@@ -52,6 +49,7 @@ router.get('/me', protect, (req, res) => {
 // ADMIN ONLY - protetta e autorizzata solo per admin
 router.get('/admin-only', protect, authorizeRoles('admin'), (req, res) => {
   req.session.toast = { tipo: 'success', message: 'Accesso admin autorizzato!' };
+  next();
 });
 
 module.exports = router;
