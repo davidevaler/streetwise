@@ -13,5 +13,7 @@
   "devDependencies": {
     "concurrently": "^9.1.2"
   },
-  "dependencies": {  }
+  "dependencies": {
+    "multer": "^2.0.1"
+  }
 }

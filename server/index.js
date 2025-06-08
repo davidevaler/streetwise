@@ -98,6 +98,9 @@ app.use('/api/incidenti', incidentiRoutes);
 const trafficoRoutes = require('./routes/traffico');
 app.use('/api/traffico', trafficoRoutes);
 
+const comunicazioniRoutes = require('./routes/comunicazioni');
+app.use('/api/comunicazioni', comunicazioniRoutes);
+
 
 //Gestione delle routes per le pagine EJS
 const viewsRouter = require('./routes/index');

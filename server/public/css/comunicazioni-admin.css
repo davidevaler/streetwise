@@ -1,0 +1,279 @@
+.communications-section {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  padding: 25px;
+  margin-top: 20px;
+}
+
+.communications-section h2 {
+  color: #333;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.communications-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.communications-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.communications-table th {
+  padding: 15px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.communications-table tbody tr {
+  border-bottom: 1px solid #f1f3f4;
+  transition: all 0.3s ease;
+}
+
+.communications-table tbody tr:hover {
+  background-color: #f8f9ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+}
+
+.communications-table td {
+  padding: 15px 12px;
+  vertical-align: top;
+  font-size: 14px;
+  color: #333;
+}
+
+.communications-table td:first-child {
+  max-width: 300px;
+}
+
+.communications-table td:first-child strong {
+  color: #667eea;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.communications-table td:first-child small {
+  color: #666;
+  line-height: 1.4;
+  display: block;
+}
+
+/* Modal per comunicazioni */
+#communicationModal .modal-content {
+  max-width: 600px;
+  width: 90vw;
+  margin: 20px auto; 
+  max-height: calc(100vh - 80px); 
+  overflow-y: auto; 
+  position: relative; 
+}
+
+#communicationModal .form-group {
+  margin-bottom: 20px;
+}
+
+#communicationModal .form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+#communicationModal input[type="text"],
+#communicationModal input[type="email"],
+#communicationModal textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  resize: vertical;
+}
+
+#communicationModal input[type="text"]:focus,
+#communicationModal input[type="email"]:focus,
+#communicationModal textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+#communicationModal textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+#communicationModal input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 2px dashed #e1e5e9;
+  border-radius: 8px;
+  background: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#communicationModal input[type="file"]:hover {
+  border-color: #667eea;
+  background: #f0f4ff;
+}
+
+#existing-attachments {
+  background: #f8f9fa;
+  border: 1px solid #e1e5e9;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+#existing-attachments strong {
+  color: #667eea;
+  display: block;
+  margin-bottom: 8px;
+}
+
+#existing-attachments a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+#existing-attachments a:hover {
+  color: #5a6fd8;
+  text-decoration: underline;
+}
+
+#keep-attachments-group {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 15px;
+}
+
+#keep-attachments-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #856404;
+  cursor: pointer;
+}
+
+#keep-attachments-group input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #667eea;
+}
+
+/* Stili per i pulsanti nelle comunicazioni */
+.communications-table .btn {
+  padding: 8px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+  margin-right: 5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+}
+
+.communications-table .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Responsive per tabella comunicazioni */
+@media (max-width: 1024px) {
+  .communications-table {
+    font-size: 12px;
+  }
+  
+  .communications-table th,
+  .communications-table td {
+    padding: 10px 8px;
+  }
+  
+  .communications-table td:first-child {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .communications-section {
+    padding: 15px;
+    margin-top: 15px;
+  }
+  
+  .communications-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .communications-table thead,
+  .communications-table tbody,
+  .communications-table th,
+  .communications-table td,
+  .communications-table tr {
+    display: block;
+  }
+  
+  .communications-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  
+  .communications-table tr {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background: white;
+  }
+  
+  .communications-table td {
+    border: none;
+    position: relative;
+    padding: 8px 8px 8px 30%;
+    white-space: normal;
+    text-align: left;
+  }
+  
+  .communications-table td:before {
+    content: attr(data-label) ": ";
+    position: absolute;
+    left: 6px;
+    width: 25%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #667eea;
+  }
+  
+  #communicationModal .modal-content {
+    width: 95vw;
+    max-width: none;
+    margin: 20px auto;
+  }
+}
