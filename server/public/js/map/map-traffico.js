@@ -20,7 +20,7 @@ function initTrafficLayer(map) {
 // Carica i dati del traffico dal server
 async function loadTrafficData() {
     try {
-        const response = await fetch(`${window.SERVER_URL}/api/traffico`);
+        const response = await fetch(`/api/traffico`);
         
         if (!response.ok) {
             throw new Error(`Errore HTTP: ${response.status}`);
