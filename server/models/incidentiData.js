@@ -7,4 +7,4 @@ const IncidentiDataSchema = new mongoose.Schema({
     citta: Number
 }, { collection: 'incidenti' });
 
-module.exports = mongoose.model('IncidentiData', IncidentiDataSchema);
+module.exports = mongoose.model('incidentiData', IncidentiDataSchema);

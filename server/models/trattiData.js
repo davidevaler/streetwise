@@ -9,4 +9,4 @@ const TrattiDataSchema = new mongoose.Schema({
     citta: Number
 }, { collection: 'tratti' });
 
-module.exports = mongoose.model('TrattiData', TrattiDataSchema);
+module.exports = mongoose.model('trattiData', TrattiDataSchema);

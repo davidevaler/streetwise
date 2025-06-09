@@ -9,4 +9,4 @@ const CittaDataSchema = new mongoose.Schema({
     bounds: Object
 }, { collection: 'citta' });
 
-module.exports = mongoose.model('CittaData', CittaDataSchema);
+module.exports = mongoose.model('cittaData', CittaDataSchema);
