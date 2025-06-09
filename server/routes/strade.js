@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const StradeData = require('../models/StradeData');
+const StradeData = require('../models/stradeData');
 
 router.get('/', async (req, res) => {
     const {citta} = req.query;

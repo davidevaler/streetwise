@@ -9,4 +9,4 @@ const GiuntiDataSchema = new mongoose.Schema({
     citta: Number
 }, { collection: 'giunti' });
 
-module.exports = mongoose.model('GiuntiData', GiuntiDataSchema);
+module.exports = mongoose.model('giuntiData', GiuntiDataSchema);

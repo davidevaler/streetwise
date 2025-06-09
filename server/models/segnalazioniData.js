@@ -38,4 +38,4 @@ const SegnalazioniDataSchema = new mongoose.Schema({
     }
 }, { collection: 'segnalazioni' });
 
-module.exports = mongoose.model('SegnalazioniData', SegnalazioniDataSchema);
+module.exports = mongoose.model('segnalazioniData', SegnalazioniDataSchema);

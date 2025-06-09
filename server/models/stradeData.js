@@ -8,4 +8,4 @@ const StradeDataSchema = new mongoose.Schema({
     citta: Number
 }, { collection: 'strade' });
 
-module.exports = mongoose.model('StradeData', StradeDataSchema);
+module.exports = mongoose.model('stradeData', StradeDataSchema);

@@ -32,7 +32,7 @@ app.use(cookieParser());
 */
 app.use(session({
   secret: process.env.SESSION_SECRET, // IMPORTANTE: Deve essere una variabile d'ambiente su Render
-  sameSite: 'strict',
+  SameSite: 'Strict',
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -117,8 +117,10 @@ app.use((err, req, res, next) => {
   res.status(500).render('error', { message: '500 - Errore interno del server', statusCode: 500 });
 });
 
+
 //  Non serve più la gestione per SSL perchè se ne occupa render
 // Fa il compito di una  reverse proxy (credo)
+
 
 // Avvio del server unico (HTTP interno)
 // Render inoltra il traffico HTTPS esterno a questa porta HTTP interna
