@@ -1,0 +1,95 @@
+<div>
+  <link rel="stylesheet" href="/css/admin.css">
+  <link rel="stylesheet" href="/css/comunicazioni-admin.css">
+  <div class="admin-container">
+    <div class="admin-header">
+      <h1>Dashboard Delegati</h1>
+      <p>Benvenuto nella sezione delegati di Streetwise</p>
+    </div>
+    
+    <div class="user-info">
+      <h2>📧 Informazioni Utente</h2>
+      <% if (typeof user !== 'undefined' && user) { %>
+        <p><strong>Email:</strong> <span id="user-email"><%- user.email %></span></p>
+        <p><strong>Ruolo:</strong> <span id="user-role"><%- user.role %></span></p>
+        <p><strong>ID:</strong> <span id="user-id"><%- user.id %></span></p>
+      <% } %>
+    </div>
+    
+    <div class="admin-stats">
+      <div class="stat-card">
+        <h3>📧 Comunicazioni</h3>
+        <div class="stat-value" id="total-communications">-</div>
+        <p>Comunicazioni Totali</p>
+      </div>
+    </div>
+
+    <div class="communications-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>📧 Gestione Comunicazioni</h2>
+        <button class="btn btn-success" onclick="openAddCommunicationModal()">➕ Aggiungi Comunicazione</button>
+      </div>
+  
+      <div id="communications-loading" class="loading">
+        Caricamento comunicazioni...
+      </div>
+  
+      <div id="communications-content" style="display: none;">
+        <table class="communications-table">
+          <thead>
+            <tr>
+              <th>Titolo</th>
+              <th>Email</th>
+              <th>Data Creazione</th>
+              <th>Allegati</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody id="communications-tbody">
+            <!-- Le comunicazioni verranno inserite qui dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal per le comunicazioni -->
+  <div id="communicationModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+      <h3 id="communication-modal-title">Aggiungi Nuova Comunicazione</h3>
+      <form id="communicationForm" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="communication-title">Titolo:</label>
+          <input type="text" id="communication-title" required>
+        </div>
+        <div class="form-group">
+          <label for="communication-email">Email:</label>
+          <input type="email" id="communication-email" required>
+        </div>
+        <div class="form-group">
+          <label for="communication-description">Descrizione:</label>
+          <textarea id="communication-description" rows="4" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; resize: vertical;"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="communication-files">Allegati (opzionale):</label>
+          <input type="file" id="communication-files" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.doc,.docx,.txt">
+          <small style="color: #666;">Tipi supportati: PDF, immagini, Word, testo. Max 5 file, 10MB ciascuno</small>
+        </div>
+        <div id="existing-attachments" style="margin-top: 10px;"></div>
+        <div class="form-group" id="keep-attachments-group" style="display: none;">
+          <label>
+            <input type="checkbox" id="keep-attachments" checked>
+            Mantieni allegati esistenti
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeCommunicationModal()">Annulla</button>
+          <button type="submit" class="btn btn-primary" id="communication-modal-submit">Salva</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/comunicazioni-delegati.js"></script>
+</div>

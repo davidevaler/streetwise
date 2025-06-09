@@ -23,22 +23,20 @@ class CommunicationsCarousel {
   }
 
   async loadComunicazioni() {
-  try {
-    const response = await fetch('/api/comunicazioni/recenti?limite=15');
-    const result = await response.json();
+    try {
+      const response = await fetch('/api/comunicazioni/recenti?limite=15');
+      const result = await response.json();
 
-    if (result.success && result.data) {
-      this.comunicazioni = result.data;
-    } else {
-      throw new Error('Errore nel caricamento delle comunicazioni');
+      if (result.success && result.data) {
+        this.comunicazioni = result.data;
+      } else {
+        throw new Error('Errore nel caricamento delle comunicazioni');
+      }
+    } catch (error) {
+      console.error('Errore nel caricamento:', error);
+      this.comunicazioni = [];
     }
-  } catch (error) {
-    console.error('Errore nel caricamento:', error);
-    this.comunicazioni = [];
   }
-}
-
-
 
   createCarousel() {
     const divComm = document.getElementById('comm-div');
@@ -51,7 +49,7 @@ class CommunicationsCarousel {
       divComm.innerHTML = `
         <div class="carousel-container">
           <div class="carousel-header">
-            <div class="big">📢</div><h3>Comunicazioni</h3>
+            <div class="big"></div><h3>Comunicazioni</h3>
           </div>
           <div class="no-communications">
             <p>Nessuna comunicazione disponibile al momento.</p>
@@ -64,7 +62,7 @@ class CommunicationsCarousel {
     const carouselHTML = `
       <div class="carousel-container">
         <div class="carousel-header">
-          <div class="big">📢</div><h3>Comunicazioni</h3>
+          <div class="big"></div><h3>Comunicazioni</h3>
           <div class="carousel-indicators">
             <span class="indicator">${this.currentIndex + 1}</span> / 
             <span class="total">${Math.ceil(this.comunicazioni.length / this.itemsPerPage)}</span>
@@ -123,6 +121,24 @@ class CommunicationsCarousel {
       descrizioneBreve += '...';
     }
 
+    // Genera indicatore allegati se presenti
+    let allegatiBadge = '';
+    if (comunicazione.allegati && comunicazione.allegati.length > 0) {
+      const immagini = comunicazione.allegati.filter(a => this.isImage(a.contentType)).length;
+      const documenti = comunicazione.allegati.length - immagini;
+      
+      let badgeText = '';
+      if (immagini > 0 && documenti > 0) {
+        badgeText = `📎 ${immagini} img, ${documenti} doc`;
+      } else if (immagini > 0) {
+        badgeText = `🖼️ ${immagini} immagine${immagini > 1 ? 'i' : ''}`;
+      } else if (documenti > 0) {
+        badgeText = `📄 ${documenti} documento${documenti > 1 ? 'i' : ''}`;
+      }
+      
+      allegatiBadge = `<div class="communication-attachments-badge">${badgeText}</div>`;
+    }
+
     return `
       <div class="communication-card" data-id="${comunicazione._id}">
         <div class="communication-header">
@@ -130,6 +146,7 @@ class CommunicationsCarousel {
           <span class="communication-date">${dataFormatted}</span>
         </div>
         <p class="communication-description">${descrizioneBreve}</p>
+        ${allegatiBadge}
       </div>
     `;
   }
@@ -258,9 +275,133 @@ class CommunicationsCarousel {
     }, 1000);
   }
 
+  isImage(contentType) {
+    return contentType && contentType.startsWith('image/');
+  }
+
+  isDocument(contentType) {
+    return contentType && !contentType.startsWith('image/');
+  }
+
+  getFileIcon(contentType, fileName) {
+    if (this.isImage(contentType)) {
+      return '🖼️';
+    }
+    
+    if (contentType) {
+      if (contentType.includes('pdf')) return '📄';
+      if (contentType.includes('word') || contentType.includes('document')) return '📝';
+      if (contentType.includes('excel') || contentType.includes('spreadsheet')) return '📊';
+      if (contentType.includes('powerpoint') || contentType.includes('presentation')) return '📈';
+      if (contentType.includes('zip') || contentType.includes('rar')) return '🗜️';
+      if (contentType.includes('text')) return '📃';
+      if (contentType.includes('audio')) return '🎵';
+      if (contentType.includes('video')) return '🎬';
+    }
+    
+    // Fallback basato sull'estensione del file
+    if (fileName) {
+      const ext = fileName.split('.').pop().toLowerCase();
+      switch (ext) {
+        case 'pdf': return '📄';
+        case 'doc':
+        case 'docx': return '📝';
+        case 'xls':
+        case 'xlsx': return '📊';
+        case 'ppt':
+        case 'pptx': return '📈';
+        case 'zip':
+        case 'rar': return '🗜️';
+        case 'txt': return '📃';
+        case 'mp3':
+        case 'wav': return '🎵';
+        case 'mp4':
+        case 'avi': return '🎬';
+        default: return '📎';
+      }
+    }
+    
+    return '📎';
+  }
+
+  createDataUrl(allegato) {
+    if (!allegato.dati || !allegato.dati.base64) {
+      console.error('Dati base64 non trovati per l\'allegato:', allegato.nomeFile);
+      return null;
+    }
+    
+    return `data:${allegato.contentType};base64,${allegato.dati.base64}`;
+  }
+
+  downloadFile(allegato) {
+    const dataUrl = this.createDataUrl(allegato);
+    if (!dataUrl) return;
+    
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = allegato.nomeFile;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   expandCommunication(id) {
     const comunicazione = this.comunicazioni.find(c => c._id === id);
     if (!comunicazione) return;
+
+    // Genera HTML per gli allegati
+    let allegatiHTML = '';
+    if (comunicazione.allegati && comunicazione.allegati.length > 0) {
+      const immagini = comunicazione.allegati.filter(a => this.isImage(a.contentType));
+      const documenti = comunicazione.allegati.filter(a => this.isDocument(a.contentType));
+      
+      allegatiHTML = '<div class="modal-attachments">';
+      
+      // Sezione immagini
+      if (immagini.length > 0) {
+        allegatiHTML += '<div class="modal-images-section">';
+        allegatiHTML += '<h4 class="attachments-title">📷 Immagini</h4>';
+        allegatiHTML += '<div class="modal-images-grid">';
+        
+        immagini.forEach((img, index) => {
+          const dataUrl = this.createDataUrl(img);
+          if (dataUrl) {
+            allegatiHTML += `
+              <div class="modal-image-container">
+                <img src="${dataUrl}" alt="${img.nomeFile}" class="modal-image" 
+                     onclick="window.open('${dataUrl}', '_blank')" 
+                     title="Clicca per aprire a schermo intero">
+                <div class="modal-image-caption">${img.nomeFile}</div>
+              </div>
+            `;
+          }
+        });
+        
+        allegatiHTML += '</div></div>';
+      }
+      
+      // Sezione documenti
+      if (documenti.length > 0) {
+        allegatiHTML += '<div class="modal-documents-section">';
+        allegatiHTML += '<h4 class="attachments-title">📎 Documenti</h4>';
+        allegatiHTML += '<div class="modal-documents-list">';
+        
+        documenti.forEach((doc, index) => {
+          const icon = this.getFileIcon(doc.contentType, doc.nomeFile);
+          allegatiHTML += `
+            <div class="modal-document-item" onclick="window.carouselInstance.downloadFile(${JSON.stringify(doc).replace(/"/g, '&quot;')})">
+              <span class="document-icon">${icon}</span>
+              <span class="document-name">${doc.nomeFile}</span>
+              <span class="document-download">⬇️</span>
+            </div>
+          `;
+        });
+        
+        allegatiHTML += '</div></div>';
+      }
+      
+      allegatiHTML += '</div>';
+    }
 
     // Crea un modal per mostrare la comunicazione completa
     const modal = document.createElement('div');
@@ -284,21 +425,27 @@ class CommunicationsCarousel {
           <div class="modal-description">
             ${comunicazione.descrizione.replace(/\n/g, '<br>')}
           </div>
+          ${allegatiHTML}
         </div>
       </div>
     `;
 
     document.body.appendChild(modal);
+    
+    // Salva riferimento per il download dei documenti
+    window.carouselInstance = this;
 
     // Eventi per chiudere il modal
     const closeBtn = modal.querySelector('.modal-close');
     closeBtn.addEventListener('click', () => {
       document.body.removeChild(modal);
+      window.carouselInstance = null;
     });
 
     modal.addEventListener('click', (e) => {
       if (e.target === modal) {
         document.body.removeChild(modal);
+        window.carouselInstance = null;
       }
     });
   }
@@ -309,7 +456,7 @@ class CommunicationsCarousel {
       divComm.innerHTML = `
         <div class="carousel-container">
           <div class="carousel-header">
-            <div class="big">📢</div> <h3>Comunicazioni</h3>
+            <div class="big"></div><h3>Comunicazioni</h3>
           </div>
           <div class="carousel-error">
             <p>⚠️ Errore nel caricamento delle comunicazioni. Riprova più tardi.</p>

@@ -38,9 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
       // Controlla il ruolo e reindirizza
       if (data.user.role === "admin") {
         window.location.href = "/admin";
-      } else {
-        // Per i delegati rimane sulla stessa pagina
-        location.reload();
+
+      } else if (data.user.role === "delegato") {
+          window.location.href = "/delegati";
+        } else {
+          // Per gli altri rimane sulla stessa pagina
+          location.reload();
       }
 
     } catch (err) {

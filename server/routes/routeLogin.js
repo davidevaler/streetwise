@@ -31,9 +31,12 @@ router.post('/login-form', async (req, res) => {
     
     if (user.role === 'admin') {
       return res.redirect(`${process.env.CLIENT_URL_HTTPS}/admin`);
+    } else if (user.role === 'delegato') {
+        return res.redirect(`${process.env.CLIENT_URL_HTTPS}/delegati`);
     } else {
-      return res.redirect(`${process.env.CLIENT_URL_HTTPS}/dashboard`);
+        return res.redirect(`${process.env.CLIENT_URL_HTTPS}/dashboard`);
     }
+ 
   } catch (err) {
     console.error(err)
     req.session.toast = { tipo: 'error', message: 'Errore interno' };
