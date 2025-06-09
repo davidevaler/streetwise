@@ -131,8 +131,21 @@ let privateKey, certificate, caBundle;
 * potrà passare ad un certificato vero
 */
 try {
-  privateKey = fs.readFileSync(path.join(__dirname, 'ssl', 'key.pem'), 'utf8');
-  certificate = fs.readFileSync(path.join(__dirname, 'ssl', 'cert.pem'), 'utf8');
+  const fs = require('fs');
+  const path = require('path');
+
+  //usa prima la versione in /etc/secrets, poi fallback a quella in ssl/
+  const keyPath = fs.existsSync('/etc/secrets/key.pem')
+    ? '/etc/secrets/key.pem'
+    : path.join(__dirname, 'ssl', 'key.pem');
+  
+  const certPath = fs.existsSync('/etc/secrets/cert.pem')
+    ? '/etc/secrets/cert.pem'
+    : path.join(__dirname, 'ssl', 'cert.pem');
+  
+  privateKey = fs.readFileSync(keyPath, 'utf8');
+  certificate = fs.readFileSync(certPath, 'utf8');
+
   //caBundle = fs.readFileSync(path.join(__dirname, 'ssl', 'ca_bundle.crt'), 'utf8'); => servirà con un sistema vero
 
 } catch (err) {
