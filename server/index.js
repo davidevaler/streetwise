@@ -33,7 +33,7 @@ app.use(cookieParser());
 app.use(session({
   secret: process.env.SESSION_SECRET, // IMPORTANTE: Deve essere una variabile d'ambiente su Render
   store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI, 
+    mongoUrl: process.env.MONGO_URI, 
     ttl: 60 * 60 
   }),
   SameSite: 'Strict',
