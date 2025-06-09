@@ -3,20 +3,6 @@
   border-radius: 15px;
   min-width: 20vw;
 }
-
-    .sidebar h3 {
-      color: #282c34;
-      font-size: 1.5em;
-      margin-bottom: 20px;
-      padding-left: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .sidebar h3::before {
-      font-size: 1.2em;
-    }
     
     .sidebar ul {
       list-style: none;

@@ -46,3 +46,20 @@ main {
 a {
   text-decoration: none;
 }
+
+h3 {
+  color: #282c34;
+  font-size: 1.2em;
+  margin-bottom: 20px;
+  padding-left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+h3::before {
+  font-size: 1.4em;
+}
+
+.big {
+  font-size: 1.4em;
+}

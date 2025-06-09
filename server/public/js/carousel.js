@@ -51,7 +51,7 @@ class CommunicationsCarousel {
       divComm.innerHTML = `
         <div class="carousel-container">
           <div class="carousel-header">
-            📢 <span>Comunicazioni</span>
+            <div class="big">📢</div><h3>Comunicazioni</h3>
           </div>
           <div class="no-communications">
             <p>Nessuna comunicazione disponibile al momento.</p>
@@ -64,7 +64,7 @@ class CommunicationsCarousel {
     const carouselHTML = `
       <div class="carousel-container">
         <div class="carousel-header">
-          📢 <span>Comunicazioni</span>
+          <div class="big">📢</div><h3>Comunicazioni</h3>
           <div class="carousel-indicators">
             <span class="indicator">${this.currentIndex + 1}</span> / 
             <span class="total">${Math.ceil(this.comunicazioni.length / this.itemsPerPage)}</span>
@@ -309,7 +309,7 @@ class CommunicationsCarousel {
       divComm.innerHTML = `
         <div class="carousel-container">
           <div class="carousel-header">
-            📢 <span>Comunicazioni</span>
+            <div class="big">📢</div> <h3>Comunicazioni</h3>
           </div>
           <div class="carousel-error">
             <p>⚠️ Errore nel caricamento delle comunicazioni. Riprova più tardi.</p>
