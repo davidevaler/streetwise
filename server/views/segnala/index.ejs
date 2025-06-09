@@ -1,0 +1,76 @@
+<div class="box">
+  <link rel="stylesheet" href="/css/segnalazioni.css">
+  <div class="segnala-container">
+    <div class="form-section">
+      <div class="form-card">
+        <h3>Dettagli Segnalazione</h3>
+        <form id="segnalaForm">
+          <div class="form-group">
+            <label for="titolo">Titolo*</label>
+            <input type="text" id="titolo" name="titolo" placeholder="Es: Buca stradale in Via Roma" required maxlength="100">
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email*</label>
+            <input type="email" id="email" name="email" placeholder="tua.email@esempio.com" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="descrizione">Descrizione*</label>
+            <textarea id="descrizione" name="descrizione" placeholder="Descrivi il problema nel dettaglio..." required rows="5" maxlength="500"></textarea>
+            <small class="char-counter">0/500 caratteri</small>
+          </div>
+          
+          <div class="coordinate-info">
+            <h4>📍 Posizione</h4>
+            <p id="coord-status" class="coord-empty">Clicca sulla mappa per selezionare la posizione del problema</p>
+            <input type="hidden" id="coord-x" name="coord-x">
+            <input type="hidden" id="coord-y" name="coord-y">
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" id="submit-btn" class="submit-btn" disabled>
+              📤 Invia Segnalazione
+            </button>
+            <button type="button" id="reset-btn" class="reset-btn">
+              🔄 Reset Form
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="map-section">
+      <div class="map-card">
+        <h3>🗺️ Seleziona la Posizione</h3>
+        <div class="map-instructions">
+          <p>Clicca sulla mappa nel punto dove si trova il problema</p>
+        </div>
+        <div id="segnala-map"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal di conferma -->
+  <div id="success-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>✅ Segnalazione Inviata!</h3>
+      </div>
+      <div class="modal-body">
+        <p>La tua segnalazione è stata inviata con successo.</p>
+        <p>Riceverai conferma via email e ti aggiorneremo sullo stato della segnalazione.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="/">Torna alla Mappa</a>
+        <a href="/segnala">Nuova Segnalazione</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
+  <script src="/js/map/utils.js"></script>
+  <script src="/js/segnalazioni.js"></script>
+
+</div>

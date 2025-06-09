@@ -6,18 +6,22 @@ const { protect, authorizeRoles } = require('../controllers/authMiddleware'); //
 
 // pagina principale x utente non autenticato
 router.get('/', (req, res) => {
-    res.render('base', { error: null });
+    res.render('base', { user: req.user ? req.user : null, currPath: '/' });
 });
+
+router.get('/segnala', (req, res) => {
+    res.render('segnala', { user: req.user ? req.user : null, currPath: '/segnala' });
+})
 
 
 // pagina per utenti auth (Protetta - Richiede autenticazione)
 router.get('/dashboard', protect, (req, res) => {
-    res.render('dashboard', { user: req.user }); // Passa i dati dell'utente alla vista EJS
+    res.render('dashboard', { user: req.user, currPath:'/dashboard' }); // Passa i dati dell'utente alla vista EJS
 });
 
 // pagina admin (Protetta - Richiede autenticazione e ruolo 'admin')
 router.get('/admin', protect, authorizeRoles('admin'), (req, res) => {
-    res.render('admin', { user: req.user }); // Renderizza il file admin_page.ejs
+    res.render('admin', { user: req.user, currPath: '/admin' }); // Renderizza il file admin_page.ejs
 });
 
 // logout

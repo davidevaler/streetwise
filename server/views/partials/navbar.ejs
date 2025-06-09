@@ -9,25 +9,37 @@
     <div>
         <input type="text" id="search-city" value="Trento">
     </div>
-
-    <% if (typeof user !== 'undefined' && user) { %>
-        <div>
-            <% if (user.role === 'admin') { %>
-                <a href="/admin" class="login-btn">Pannello Admin</a>
-                <a href="/dashboard" class="login-btn">Dashboard</a>
+    <div class="navbar-actions">
+        <div id="NavigateBtn">
+            <% if ( typeof user !== 'undefined' && user ) { %>
+                <% if ( typeof currPath !== 'undefined' && currPath && currPath === '/admin' ) { %>
+                    <a href="/dashboard" class="login-btn">Dashboard</a>
+                <% } else { %>
+                    <a href="/admin" class="login-btn">Pannello Admin</a>
+                <% } %>
+            <% } else { %>
+                <% if (typeof currPath !== 'undefined' && currPath && currPath === '/segnala') { %>
+                    <a href="/" class="login-btn">Indietro</a>
+                <% } else { %>
+                    <a href="/segnala" class="login-btn">Segnala</a>
+                <% } %>
             <% } %>
-            <a href="/logout" class="login-btn">LOGOUT</a>
         </div>
-    <% } else { %>
-        <button class="login-btn" id="loginToggleBtn">LOGIN</button>
-        <div id="login-dropdown" class="login-dropdown hidden">
-            <form id="loginForm" action="/api/auth/login-form" method="POST">
-                <input type="email" name="email" id="login-email" placeholder="📧 Email" required />
-                <input type="password" name="password" id="login-password" placeholder="🔒 Password" required />
-                <button type="submit">Accedi</button>
-            </form>
+        <div id="LoggerBtn">
+            <% if ( typeof user !== 'undefined' && user ) { %>
+              <a href="/logout" class="login-btn">Logout</a>
+            <% } else { %>
+                <button class="login-btn" id="loginToggleBtn">Login</button>
+                <div id="login-dropdown" class="login-dropdown hidden">
+                    <form id="loginForm" action="/api/auth/login-form" method="POST">
+                    <input type="email" name="email" id="login-email" placeholder="📧 Email" required />
+                    <input type="password" name="password" id="login-password" placeholder="🔒 Password" required />
+                    <button type="submit">Accedi</button>
+                    </form>
+                </div>
+            <% } %>
         </div>
-    <% } %>
-    
+    </div>
+
     <script src="/js/navbar.js"></script>
 </div>
