@@ -3,8 +3,8 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
@@ -32,6 +32,10 @@ app.use(cookieParser());
 */
 app.use(session({
   secret: process.env.SESSION_SECRET, // IMPORTANTE: Deve essere una variabile d'ambiente su Render
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI, 
+    ttl: 60 * 60 
+  }),
   SameSite: 'Strict',
   resave: false,
   saveUninitialized: false,
@@ -117,10 +121,8 @@ app.use((err, req, res, next) => {
   res.status(500).render('error', { message: '500 - Errore interno del server', statusCode: 500 });
 });
 
-
 //  Non serve più la gestione per SSL perchè se ne occupa render
 // Fa il compito di una  reverse proxy (credo)
-
 
 // Avvio del server unico (HTTP interno)
 // Render inoltra il traffico HTTPS esterno a questa porta HTTP interna
