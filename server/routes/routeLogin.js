@@ -16,7 +16,7 @@ router.post('/login-form', async (req, res) => {
         message: "Autenticazione non riuscita",
         tipo: "error"
       };
-      return res.redirect(process.env.CLIENT_URL_HTTPS);
+      return res.redirect('/');
 
     }
     const token = generateToken(user);
@@ -30,14 +30,14 @@ router.post('/login-form', async (req, res) => {
     req.session.toast = { tipo: 'success', message: 'Login effettuato con successo!'};
     
     if (user.role === 'admin') {
-      return res.redirect(`${process.env.CLIENT_URL_HTTPS}/admin`);
+      return res.redirect(`/admin`);
     } else {
-      return res.redirect(`${process.env.CLIENT_URL_HTTPS}/dashboard`);
+      return res.redirect(`/dashboard`);
     }
   } catch (err) {
     console.error(err)
     req.session.toast = { tipo: 'error', message: 'Errore interno' };
-    return res.redirect(process.env.CLIENT_URL_HTTPS);
+    return res.redirect('/');
   }
 })
 
