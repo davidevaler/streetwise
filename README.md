@@ -46,17 +46,13 @@ StreetWise è una piattaforma web per la gestione della mobilità urbana, pensat
    git clone https://github.com/davidevaler/streetwise.git
    cd streetwise
    ```
-2. Installa le dipendenze del progetto principale:
-   ```bash
-   npm install
-   ```
-3. Installa e avvia il **server**:
+2. Installa e avvia il **server**:
    ```bash
    cd server
    npm install
    node index.js
    ```
-4. Di default è possibile accedere all’applicazione via browser in locale su `https://localhost:3443/` oppure tramite Render su `https://streetwise.onrender.com/`.
+Di default è possibile accedere all’applicazione via browser in locale su `https://localhost:3443/` oppure tramite Render su `https://streetwise.onrender.com/`.
 
 ---
 
