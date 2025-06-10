@@ -1,9 +1,6 @@
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express = require('express');
-const https = require('https');
-const http  = require('http');
-const fs  = require('fs');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
@@ -13,15 +10,11 @@ require('dotenv').config();
 
 // Imposta CLIENT_URL e PORT dal .env
 const app = express();
-const CLIENT_URL = process.env.CLIENT_URL_HTTPS || `https://localhost:${process.env.PORT_HTTPS || 3443}`;
-const CLIENT_URL_HTTP = process.env.CLIENT_URL_HTTP || `http://localhost:${process.env.PORT || 3000}`; // Fallback sicuro
-const PORT_HTTP = process.env.PORT_HTTP || 3000; // Porta predefinita se non specificata
-const PORT = process.env.PORT_HTTPS || 3443       //Ports 
 
-app.use(cors({  
-  origin: CLIENT_URL,   
-  credentials: true     //necessaria per la gestione cookies
-}));
+// process.env.PORT viene fornito da Render.Add commentMore actions
+const PORT = process.env.PORT || 3000;            // Porta predefinita di sicurezza
+const CLIENT_URL = process.env.CLIENT_URL_HTTPS;  // url Render
+
 
 //configura la gestione client
 app.set('view engine', 'ejs');
@@ -134,26 +127,3 @@ app.listen(PORT, () => {
   console.log(`Server Express in ascolto sulla porta ${PORT}`);
   console.log(`L'applicazione sarà accessibile pubblicamente via HTTPS all'URL: ${CLIENT_URL || 'Non definito (impostare CLIENT_URL_HTTPS in .env/Render)'}`);
 });
-
-
-/*
-* Avvio server http per reindirizzamento
-* Questa parte è temporanea, con un server vero passeremo ad 
-* un sistema di 'reverse proxy' che si occuperà di gestire 
-* la connesione in modo più sicuro e veloce
-*/
-const httpServer = http.createServer((req, res) => {
-  // Controlla se la richiesta è già HTTPS, se sì non fa nulla
-  if (req.secure) {
-    return app(req, res);
-  }
-
-  //redirect semplice all'URL base https
-  const redirectUrl = process.env.CLIENT_URL_HTTPS;
-  res.writeHead(301, { "Location": redirectUrl });
-  res.end();
-  console.log(`Reindirizzamento HTTP: ${req.url} -> ${redirectUrl}`);
-});
-
-
-httpServer.listen(PORT_HTTP, () => console.log(`Server in ascolto sulla porta ${PORT_HTTP}`));
