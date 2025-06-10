@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// AUtenticazione
+// Autenticazione
 const { protect, authorizeRoles } = require('../controllers/authMiddleware'); // Assicurati il percorso corretto
 
 // pagina principale x utente non autenticato
@@ -13,7 +13,6 @@ router.get('/segnala', (req, res) => {
     res.render('segnala', { user: req.user ? req.user : null, currPath: '/segnala' });
 })
 
-
 // pagina per utenti auth (Protetta - Richiede autenticazione)
 router.get('/dashboard', protect, (req, res) => {
     res.render('dashboard', { user: req.user, currPath:'/dashboard' }); // Passa i dati dell'utente alla vista EJS
@@ -22,6 +21,11 @@ router.get('/dashboard', protect, (req, res) => {
 // pagina admin (Protetta - Richiede autenticazione e ruolo 'admin')
 router.get('/admin', protect, authorizeRoles('admin'), (req, res) => {
     res.render('admin', { user: req.user, currPath: '/admin' }); // Renderizza il file admin_page.ejs
+});
+
+// pagina delegati (Protetta - Richiede autenticazione e ruolo 'delegato')
+router.get('/delegati', protect, authorizeRoles('delegato'), (req, res) => {
+    res.render('delegati', { user: req.user, currPath: '/delegati' }); // Renderizza il file delegati/index.ejs
 });
 
 // logout

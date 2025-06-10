@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadUsers() {
   const token = localStorage.getItem('token');
   try {
-    const response = await fetch(`/api/users`, {
+    const response = await fetch(`/api/user`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
@@ -111,7 +111,7 @@ async function loadUsers() {
         
         if (currentEditingUserId) {
           // Modifica utente esistente
-          response = await fetch(`/api/users/${currentEditingUserId}`, {
+          response = await fetch(`/api/user/${currentEditingUserId}`, {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -125,7 +125,7 @@ async function loadUsers() {
             alert('La password è obbligatoria per i nuovi utenti');
             return;
           }
-          response = await fetch(`/api/users`, {
+          response = await fetch(`/api/user`, {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -160,7 +160,7 @@ async function loadUsers() {
       const token = localStorage.getItem('token');
       
       try {
-        const response = await fetch(`/api/users/${userId}`, {
+        const response = await fetch(`/api/user/${userId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,

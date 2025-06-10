@@ -117,6 +117,19 @@
   overflow: hidden;
 }
 
+/* Badge per allegati nelle card del carosello */
+.communication-attachments-badge {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  font-size: 0.75em;
+  padding: 4px 8px;
+  border-radius: 8px;
+  margin-top: 10px;
+  display: inline-block;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
 .carousel-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -204,14 +217,24 @@
   justify-content: center;
   z-index: 2000;
   backdrop-filter: blur(5px);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-content {
   background: white;
   border-radius: 15px;
-  max-width: 600px;
-  width: 90%;
-  max-height: 80vh;
+  max-width: 900px;
+  width: 95%;
+  max-height: 90vh;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0,0,0,0.3);
   animation: modalSlideIn 0.3s ease-out;
@@ -266,7 +289,7 @@
 .modal-body {
   padding: 25px;
   overflow-y: auto;
-  max-height: calc(80vh - 80px);
+  max-height: calc(90vh - 80px);
 }
 
 .modal-date {
@@ -280,9 +303,195 @@
   color: #333;
   line-height: 1.6;
   font-size: 1em;
+  margin-bottom: 20px;
+}
+
+/* Stili per gli allegati nel modal */
+.modal-attachments {
+  border-top: 2px solid #f1f3f4;
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+.attachments-title {
+  color: #333;
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Sezione immagini */
+/* Sezione immagini - Grid invisibile con dimensioni fisse */
+.modal-images-section {
+  margin-bottom: 25px;
+}
+
+.modal-images-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 15px;
+  /* Rimuove la grid visibile sostituendola con flexbox */
+}
+
+.modal-image-container {
+  background: transparent; /* Rimuove il background per rendere invisibile il container */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  height: 200px; /* Altezza fissa */
+  width: auto; /* Larghezza automatica basata sulle proporzioni */
+  flex-shrink: 0; /* Impedisce al container di ridursi */
+}
+
+.modal-image-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.modal-image {
+  width: auto;
+  height: 100%; /* Occupa tutta l'altezza del container (200px) */
+  object-fit: contain; /* Fit content - mantiene le proporzioni senza ritaglio */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.modal-image:hover {
+  transform: scale(1.05);
+}
+
+.modal-image-caption {
+  padding: 10px;
+  font-size: 0.9em;
+  color: #555;
+  text-align: center;
+  font-weight: 500;
+  background: white;
+  word-break: break-word;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Mostra la caption solo al hover del container */
+.modal-image-container:hover .modal-image-caption {
+  opacity: 1;
+}
+
+/* Responsive - mantiene il comportamento per schermi piccoli */
+@media (max-width: 1200px) {
+  .modal-images-grid {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-images-grid {
+    justify-content: center; /* Centra le immagini su schermi piccoli */
+    gap: 10px;
+  }
+  
+  .modal-image-container {
+    height: 180px; /* Altezza leggermente ridotta per mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-images-grid {
+    gap: 8px;
+  }
+  
+  .modal-image-container {
+    height: 150px; /* Altezza ancora più ridotta per schermi molto piccoli */
+  }
+}
+
+/* Sezione documenti */
+.modal-documents-section {
+  margin-bottom: 15px;
+}
+
+.modal-documents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.modal-document-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  gap: 12px;
+}
+
+.modal-document-item:hover {
+  background: #e3f2fd;
+  border-color: #667eea;
+  transform: translateX(5px);
+}
+
+.document-icon {
+  font-size: 1.5em;
+  flex-shrink: 0;
+}
+
+.document-name {
+  flex: 1;
+  color: #333;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.document-download {
+  font-size: 1.2em;
+  color: #667eea;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.modal-document-item:hover .document-download {
+  opacity: 1;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
 }
 
 /* Responsive per il carosello */
+@media (max-width: 1200px) {
+  .carousel-page {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  
+  .modal-images-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .carousel-page {
     grid-template-columns: 1fr;
@@ -305,7 +514,7 @@
   .communication-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 10px;
   }
   
   .communication-date {
@@ -320,20 +529,121 @@
   .modal-body {
     padding: 20px;
   }
-}
-
-@media (max-width: 480px) {
+  
+  .modal-images-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-image {
+    height: 250px;
+  }
+  
+  .modal-document-item {
+    padding: 10px 12px;
+  }
+  
   .carousel-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
   }
   
+  .carousel-indicators {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 1.2em;
+  }
+  
+  .communication-card {
+    padding: 12px;
+  }
+  
   .communication-title {
     font-size: 1em;
   }
   
-  .communication-description {
+  .modal-header {
+    padding: 15px;
+  }
+  
+  .modal-header h3 {
+    font-size: 1.1em;
+  }
+  
+  .modal-body {
+    padding: 15px;
+  }
+  
+  .modal-image {
+    height: 200px;
+  }
+  
+  .modal-images-grid {
+    gap: 10px;
+  }
+  
+  .modal-documents-list {
+    gap: 8px;
+  }
+  
+  .modal-document-item {
+    padding: 8px 10px;
+    gap: 10px;
+  }
+  
+  .document-icon {
+    font-size: 1.3em;
+  }
+  
+  .document-name {
     font-size: 0.9em;
   }
 }
+
+/* Animazioni aggiuntive per migliorare l'esperienza utente */
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track {
+    transition: none;
+  }
+  
+  .communication-card {
+    transition: none;
+  }
+  
+  .carousel-btn {
+    transition: none;
+  }
+  
+  .modal-content {
+    animation: none;
+  }
+  
+  .communication-modal {
+    animation: none;
+  }
+}
+
+/* Stili per accessibilità */
+.carousel-btn:focus,
+.carousel-dot:focus,
+.modal-close:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.communication-card:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.modal-document-item:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+

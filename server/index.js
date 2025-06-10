@@ -1,6 +1,9 @@
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const https = require('https');
+const http  = require('http');
+const fs  = require('fs');
 const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
@@ -8,27 +11,37 @@ const mongoose = require('mongoose');
 const path = require('path');
 require('dotenv').config();
 
+// Imposta CLIENT_URL e PORT dal .env
 const app = express();
+const CLIENT_URL = process.env.CLIENT_URL_HTTPS || `https://localhost:${process.env.PORT_HTTPS || 3443}`;
+const CLIENT_URL_HTTP = process.env.CLIENT_URL_HTTP || `http://localhost:${process.env.PORT || 3000}`; // Fallback sicuro
+const PORT_HTTP = process.env.PORT_HTTP || 3000; // Porta predefinita se non specificata
+const PORT = process.env.PORT_HTTPS || 3443       //Ports 
 
-// process.env.PORT viene fornito da Render.
-const PORT = process.env.PORT || 3000;            // Porta predefinita di sicurezza
-const CLIENT_URL = process.env.CLIENT_URL_HTTPS;  // url Render
+app.use(cors({  
+  origin: CLIENT_URL,   
+  credentials: true     //necessaria per la gestione cookies
+}));
 
-
-// Gestione client
+//configura la gestione client
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
+//usando layouts andiamo a iniettare il codice delle varie pagine dentro a layouts/default.ejs
 app.use(expressLayouts);
-app.set('layout', 'layouts/default');
+app.set('layout', 'layouts/default'); // Imposta il layout di default per tutte le pagine
 
-// Parsing del body delle richieste
+// Parsing del body delle richieste (POST/PUT)
+// gestiamo comunicazioni in diversi formati: json (fetch), form, cookies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-/*
-* Configurazione della sessione (rimane invariato, ma la variabile 'secure' è cruciale)
+/* 
+* Configurazione della sessione
+* Utilizzo un sistema di sessione x user in modo da 
+* gestire autenticazioni e altri dati sensibili sul lato server
+* per avere una applicazione più sicura
 */
 app.use(session({
   secret: process.env.SESSION_SECRET, // IMPORTANTE: Deve essere una variabile d'ambiente su Render
@@ -40,13 +53,13 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // true solo in HTTPS (Render gestisce HTTPS)
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 // 1 ora
+    secure: process.env.NODE_ENV === 'production', // true solo in HTTPS
+    httpOnly: true,         // Non accessibile tramite JavaScript lato client x motivi di sicurezza
+    maxAge: 1000 * 60 * 60  // 1 ora
   }
 }));
 
-// Middleware per le notifiche
+// Middleware per le notifiche //finire implementazione
 app.use((req, res, next) => {
   res.locals.toast = req.session.toast;
   if (!(req.session.toast)) {
@@ -59,18 +72,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware per forzare HTTPS in produzione
-// Questo middleware è utile se il traffico arriva ad un proxy che non fa HTTPS termination
-// ma passa solo un header. Render tipicamente fa la terminazione HTTPS.
-app.use((req, res, next) => {
-  if (process.env.NODE_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
-    return res.redirect(`https://${req.headers.host}${req.url}`);
-  }
-  next();
-});
 
-
-// Connessione a MongoDB
+//connessione a MongoDB
 mongoose.connect(process.env.MONGO_URI, {})
   .then(() => console.log('Database MongoDB Connesso...'))
   .catch(err => console.error('Errore di connessione a MongoDB: ', err));
@@ -83,7 +86,7 @@ const cittaRoutes = require('./routes/citta');
 app.use('/api/citta', cittaRoutes);
 
 const usersRoutes = require('./routes/users');
-app.use('/api/users', usersRoutes);
+app.use('/api/user', usersRoutes);
 
 const stradeRoutes = require('./routes/strade');
 app.use('/api/strade', stradeRoutes);
@@ -107,15 +110,16 @@ const segnalazioniRoutes = require('./routes/segnalazioni');
 app.use('/api/segnalazioni', segnalazioniRoutes);
 
 
-// Gestione delle routes per le pagine EJS
+//Gestione delle routes per le pagine EJS
 const viewsRouter = require('./routes/index');
-app.use('/', viewsRouter);
+app.use('/', viewsRouter);  //Tutte le richieste non API
 
-// Gestione errori
+//gestione errori
 app.use((req, res, next) => {
   res.status(404).render('error', { message: '404 - Pagina non trovata', statusCode: 404 });
 });
 
+//gestione altr errori
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).render('error', { message: '500 - Errore interno del server', statusCode: 500 });
@@ -130,3 +134,26 @@ app.listen(PORT, () => {
   console.log(`Server Express in ascolto sulla porta ${PORT}`);
   console.log(`L'applicazione sarà accessibile pubblicamente via HTTPS all'URL: ${CLIENT_URL || 'Non definito (impostare CLIENT_URL_HTTPS in .env/Render)'}`);
 });
+
+
+/*
+* Avvio server http per reindirizzamento
+* Questa parte è temporanea, con un server vero passeremo ad 
+* un sistema di 'reverse proxy' che si occuperà di gestire 
+* la connesione in modo più sicuro e veloce
+*/
+const httpServer = http.createServer((req, res) => {
+  // Controlla se la richiesta è già HTTPS, se sì non fa nulla
+  if (req.secure) {
+    return app(req, res);
+  }
+
+  //redirect semplice all'URL base https
+  const redirectUrl = process.env.CLIENT_URL_HTTPS;
+  res.writeHead(301, { "Location": redirectUrl });
+  res.end();
+  console.log(`Reindirizzamento HTTP: ${req.url} -> ${redirectUrl}`);
+});
+
+
+httpServer.listen(PORT_HTTP, () => console.log(`Server in ascolto sulla porta ${PORT_HTTP}`));

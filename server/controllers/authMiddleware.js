@@ -67,7 +67,7 @@ const requireAdmin = async (req, res, next) => {
     const token = req.cookies.token;
     
     if (!token) {
-      req.session.toast = { message: "Non sei autenticato", tipo: "warnig"};
+      req.session.toast = { message: "Non sei autenticato", tipo: "warning"};
       return res.redirect(process.env.CLIENT_URL_HTTPS);
     }
 
@@ -88,12 +88,76 @@ const requireAdmin = async (req, res, next) => {
     next();
   } catch (error) {
     req.session.toast = { message: "Errore di accesso", tipo: "warning"};
-          return res.redirect(process.env.CLIENT_URL_HTTPS);
+    return res.redirect(process.env.CLIENT_URL_HTTPS);
+  }
+};
+
+// Middleware specifico per verificare che l'utente sia delegato
+const requireDelegato = async (req, res, next) => {
+  try {
+    const token = req.cookies.token;
+    
+    if (!token) {
+      req.session.toast = { message: "Non sei autenticato", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      req.session.toast = { message: "Utente non riconosciuto", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
+    }
+
+    if (user.role !== 'delegato') {
+      req.session.toast = { message: "Accesso negato, non sei Delegato", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    req.session.toast = { message: "Errore di accesso", tipo: "warning"};
+    return res.redirect(process.env.CLIENT_URL_HTTPS);
+  }
+};
+
+// Middleware per verificare che l'utente sia admin o delegato
+const requireAdminOrDelegato = async (req, res, next) => {
+  try {
+    const token = req.cookies.token;
+    
+    if (!token) {
+      req.session.toast = { message: "Non sei autenticato", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      req.session.toast = { message: "Utente non riconosciuto", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
+    }
+
+    if (user.role !== 'admin' && user.role !== 'delegato') {
+      req.session.toast = { message: "Accesso negato, devi essere Admin o Delegato", tipo: "warning"};
+      return res.redirect(process.env.CLIENT_URL_HTTPS);
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    req.session.toast = { message: "Errore di accesso", tipo: "warning"};
+    return res.redirect(process.env.CLIENT_URL_HTTPS);
   }
 };
 
 module.exports = { 
   protect, 
   authorizeRoles, 
-  requireAdmin 
+  requireAdmin,
+  requireDelegato,
+  requireAdminOrDelegato
 };

@@ -14,8 +14,14 @@
             <% if ( typeof user !== 'undefined' && user ) { %>
                 <% if ( typeof currPath !== 'undefined' && currPath && currPath === '/admin' ) { %>
                     <a href="/dashboard" class="login-btn">Dashboard</a>
+                <% } else if ( typeof currPath !== 'undefined' && currPath && currPath === '/delegati' ) { %>
+                    <a href="/dashboard" class="login-btn">Dashboard</a>
                 <% } else { %>
-                    <a href="/admin" class="login-btn">Pannello Admin</a>
+                    <% if (user.role === 'admin') { %>
+                        <a href="/admin" class="login-btn">Pannello Admin</a>
+                    <% } else if (user.role === 'delegato') { %>
+                        <a href="/delegati" class="login-btn">Pannello Delegati</a>
+                    <% } %>
                 <% } %>
             <% } else { %>
                 <% if (typeof currPath !== 'undefined' && currPath && currPath === '/segnala') { %>
