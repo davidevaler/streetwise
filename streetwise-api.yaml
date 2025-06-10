@@ -1,0 +1,1944 @@
+openapi: 3.0.3
+info:
+  title: StreetWise API
+  description: |
+    StreetWise è un'applicazione che fornisce uno strumento statistico riguardo traffico urbano, 
+    monitoraggio incidenti e trasporti pubblici con sistema di segnalazioni.
+    
+    ## Autenticazione
+    L'API utilizza JWT (JSON Web Tokens) per l'autenticazione. I token vengono passati tramite cookies HTTP-only per maggiore sicurezza.
+    
+    ### Ruoli Utente
+    - **admin**: Accesso completo a tutte le funzionalità
+    - **delegato**: Accesso limitato alle funzioni delegate
+    - **utente**: Accesso base (implicito per operazioni pubbliche)
+  version: 1.0.0
+  contact:
+    email: admin@streetwise.com
+servers:
+  - url: https://streetwise.onrender.com
+    description: Server di produzione
+
+tags:
+  - name: Autenticazione
+    description: Operazioni di login e profilo utente
+  - name: Gestione Utenti
+    description: CRUD operazioni per gli utenti (richiede ruolo admin)
+  - name: Dati Geografici
+    description: Informazioni su città, strade, tratti e giunti
+  - name: Traffico e Incidenti
+    description: Dati traffico in tempo reale e incidenti
+  - name: Trasporti Pubblici
+    description: Informazioni su fermate e corse
+  - name: Segnalazioni
+    description: Sistema di segnalazioni cittadini
+  - name: Comunicazioni
+    description: Gestione comunicazioni pubbliche e amministrative
+
+paths:
+  /api/auth/login-form:
+    post:
+      tags:
+        - Autenticazione
+      summary: Effettua il login
+      description: Autentica un utente e imposta il cookie JWT
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: admin@streetwise.com
+                  description: Email dell'utente
+                password:
+                  type: string
+                  example: password123
+                  description: Password dell'utente
+      responses:
+        '302':
+          description: Login successful - redirect to admin panel
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /admin
+            Set-Cookie:
+              schema:
+                type: string
+                example: token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Path=/
+        '400':
+          description: Login failed - redirect to home
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /
+
+  /api/auth/me:
+    get:
+      tags:
+        - Autenticazione
+      summary: Ottieni profilo utente corrente
+      description: Restituisce i dati dell'utente autenticato
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Profilo utente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+        '302':
+          description: Non autenticato - redirect to home
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /
+
+  /api/user:
+    get:
+      tags:
+        - Gestione Utenti
+      summary: Ottieni tutti gli utenti
+      description: Restituisce la lista di tutti gli utenti registrati. Richiede ruolo admin.
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Lista utenti
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '302':
+          description: Non autorizzato - redirect to home
+
+    post:
+      tags:
+        - Gestione Utenti
+      summary: Crea nuovo utente
+      description: Crea un nuovo utente nel sistema. Richiede ruolo admin.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: nuovo@utente.com
+                  description: Email del nuovo utente
+                password:
+                  type: string
+                  minLength: 8
+                  example: password123
+                  description: Password (min 8 caratteri)
+                role:
+                  type: string
+                  enum: [admin, delegato]
+                  default: delegato
+                  description: Ruolo dell'utente
+      responses:
+        '201':
+          description: Utente creato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Dati non validi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email e password sono obbligatori
+
+  /api/user/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        description: ID MongoDB dell'utente
+
+    get:
+      tags:
+        - Gestione Utenti
+      summary: Ottieni utente specifico
+      description: Restituisce i dati di un utente specifico. Richiede ruolo admin.
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Dati utente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Utente non trovato
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Utente non trovato
+
+    put:
+      tags:
+        - Gestione Utenti
+      summary: Modifica utente
+      description: Modifica i dati di un utente esistente. Richiede ruolo admin.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: email@modificata.com
+                  description: Nuova email
+                password:
+                  type: string
+                  minLength: 8
+                  example: nuovapassword
+                  description: Nuova password (min 8 caratteri)
+                role:
+                  type: string
+                  enum: [admin, delegato]
+                  example: admin
+                  description: Nuovo ruolo
+      responses:
+        '200':
+          description: Utente modificato con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      tags:
+        - Gestione Utenti
+      summary: Elimina utente
+      description: Elimina un utente dal sistema. Richiede ruolo admin.
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Utente eliminato con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Utente eliminato con successo
+        '400':
+          description: Operazione non permessa
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Non puoi eliminare il tuo stesso account
+
+  /api/citta:
+    get:
+      tags:
+        - Dati Geografici
+      summary: Ottieni dati città
+      description: Restituisce informazioni geografiche di una città specifica
+      parameters:
+        - name: nome
+          in: query
+          required: true
+          schema:
+            type: string
+            example: Trento
+          description: Nome della città
+      responses:
+        '200':
+          description: Dati della città
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Citta'
+        '400':
+          description: Parametro mancante
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Specificare il campo 'nome'
+
+  /api/strade:
+    get:
+      tags:
+        - Dati Geografici
+      summary: Ottieni strade di una città
+      description: Restituisce l'elenco delle strade di una città
+      parameters:
+        - name: citta
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "1"
+          description: ID numerico della città
+      responses:
+        '200':
+          description: Lista delle strade
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Strada'
+        '400':
+          description: Parametro mancante
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Specificare il campo 'nome'
+
+  /api/tratti:
+    get:
+      tags:
+        - Dati Geografici
+      summary: Ottieni tratti stradali
+      description: Restituisce i tratti stradali di una città
+      parameters:
+        - name: citta
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "1"
+          description: ID numerico della città
+      responses:
+        '200':
+          description: Lista dei tratti stradali
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tratto'
+
+  /api/giunti:
+    get:
+      tags:
+        - Dati Geografici
+      summary: Ottieni giunti stradali
+      description: Restituisce i giunti/incroci stradali di una città
+      parameters:
+        - name: citta
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "1"
+          description: ID numerico della città
+      responses:
+        '200':
+          description: Lista dei giunti stradali
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Giunto'
+
+  /api/traffico:
+    get:
+      tags:
+        - Traffico e Incidenti
+      summary: Ottieni dati traffico in tempo reale
+      description: Restituisce i dati del traffico in tempo reale per Trento utilizzando l'API OpenRouteService
+      responses:
+        '200':
+          description: Dati traffico
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  city:
+                    type: string
+                    example: Trento
+                  lastUpdate:
+                    type: string
+                    format: date-time
+                    example: "2024-06-10T14:30:00.000Z"
+                  trafficData:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TrafficRoute'
+                  summary:
+                    type: object
+                    properties:
+                      totalRoutes:
+                        type: number
+                        example: 25
+                      greenRoutes:
+                        type: number
+                        example: 15
+                      yellowRoutes:
+                        type: number
+                        example: 8
+                      redRoutes:
+                        type: number
+                        example: 2
+        '500':
+          description: Errore interno del server
+
+  /api/incidenti:
+    get:
+      tags:
+        - Traffico e Incidenti
+      summary: Ottieni incidenti
+      description: Restituisce gli incidenti registrati per una città
+      parameters:
+        - name: citta
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "1"
+          description: ID numerico della città
+      responses:
+        '200':
+          description: Lista degli incidenti
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Incidente'
+        '400':
+          description: Parametro mancante
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Specificare il campo 'citta'
+
+  /api/fermate:
+    get:
+      tags:
+        - Trasporti Pubblici
+      summary: Ottieni fermate trasporto pubblico
+      description: Restituisce le fermate del trasporto pubblico per una città
+      parameters:
+        - name: citta
+          in: query
+          required: true
+          schema:
+            type: number
+            example: 1
+          description: ID numerico della città
+      responses:
+        '200':
+          description: Lista delle fermate
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Fermata'
+        '400':
+          description: Parametro mancante
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Specificare il campo 'citta'
+
+  /api/corse:
+    get:
+      tags:
+        - Trasporti Pubblici
+      summary: Ottieni corse trasporto pubblico
+      description: Restituisce le corse del trasporto pubblico con possibilità di filtro
+      parameters:
+        - name: citta
+          in: query
+          required: true
+          schema:
+            type: number
+            example: 1
+          description: ID numerico della città
+        - name: linea
+          in: query
+          schema:
+            type: string
+            example: A
+          description: Codice della linea specifica
+        - name: ora_inizio
+          in: query
+          schema:
+            type: string
+            example: "08:00"
+          description: Ora di inizio ricerca (formato HH:MM)
+        - name: ora_fine
+          in: query
+          schema:
+            type: string
+            example: "18:00"
+          description: Ora di fine ricerca (formato HH:MM)
+      responses:
+        '200':
+          description: Lista delle corse
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Corsa'
+        '400':
+          description: Parametro mancante
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Specificare il campo 'citta'
+
+  /api/segnalazioni:
+    get:
+      tags:
+        - Segnalazioni
+      summary: Ottieni tutte le segnalazioni
+      description: Restituisce tutte le segnalazioni ordinate per data di creazione (più recenti prime)
+      responses:
+        '200':
+          description: Lista delle segnalazioni
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Segnalazione'
+        '500':
+          description: Errore del server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Errore del server
+
+    post:
+      tags:
+        - Segnalazioni
+      summary: Crea nuova segnalazione
+      description: Permette ai cittadini di creare una nuova segnalazione
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - titolo
+                - descrizione
+                - email
+                - coord
+              properties:
+                titolo:
+                  type: string
+                  example: Buca pericolosa in Via Roma
+                  description: Titolo della segnalazione
+                descrizione:
+                  type: string
+                  example: Grande buca sul lato destro della carreggiata che causa danni ai veicoli
+                  description: Descrizione dettagliata
+                email:
+                  type: string
+                  format: email
+                  example: cittadino@email.com
+                  description: Email del segnalatore
+                coord:
+                  type: object
+                  required:
+                    - x
+                    - y
+                  properties:
+                    x:
+                      type: number
+                      example: 11.121
+                      description: Longitudine
+                    y:
+                      type: number
+                      example: 46.067
+                      description: Latitudine
+      responses:
+        '201':
+          description: Segnalazione creata con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Segnalazione creata con successo
+                  segnalazione:
+                    $ref: '#/components/schemas/Segnalazione'
+        '400':
+          description: Dati mancanti o non validi
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Tutti i campi sono obbligatori (titolo, descrizione, email, coord)
+
+  /api/segnalazioni/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        description: ID MongoDB della segnalazione
+
+    put:
+      tags:
+        - Segnalazioni
+      summary: Aggiorna stato segnalazione
+      description: Permette di aggiornare lo stato di una segnalazione. Generalmente riservato agli admin.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - stato
+              properties:
+                stato:
+                  type: string
+                  enum: [aperta, in_lavorazione, chiusa]
+                  example: in_lavorazione
+                  description: Nuovo stato della segnalazione
+      responses:
+        '200':
+          description: Stato aggiornato con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Stato segnalazione aggiornato
+                  segnalazione:
+                    $ref: '#/components/schemas/Segnalazione'
+        '400':
+          description: Stato non valido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Lo stato deve essere aperta, in_lavorazione o chiusa
+        '404':
+          description: Segnalazione non trovata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Segnalazione non trovata
+
+  /api/comunicazioni/recenti:
+    get:
+      tags:
+        - Comunicazioni
+      summary: Ottieni comunicazioni recenti
+      description: Restituisce le comunicazioni più recenti per utenti non autenticati
+      parameters:
+        - name: limite
+          in: query
+          schema:
+            type: number
+            default: 10
+            example: 10
+          description: Numero massimo di comunicazioni da restituire
+      responses:
+        '200':
+          description: Comunicazioni recenti
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ComunicazionePubblica'
+
+  /api/comunicazioni:
+    get:
+      tags:
+        - Comunicazioni
+      summary: Ottieni tutte le comunicazioni
+      description: Restituisce tutte le comunicazioni ordinate per data di creazione (più recenti prime)
+      responses:
+        '200':
+          description: Tutte le comunicazioni
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ComunicazionePubblica'
+
+  /api/comunicazioni/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 507f1f77bcf86cd799439011
+        description: ID MongoDB della comunicazione
+
+    get:
+      tags:
+        - Comunicazioni
+      summary: Ottieni comunicazione specifica
+      description: Restituisce i dettagli di una comunicazione specifica
+      responses:
+        '200':
+          description: Dettagli comunicazione
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/ComunicazionePubblica'
+        '404':
+          description: Comunicazione non trovata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Comunicazione non trovata
+
+  /api/comunicazioni/admin:
+    get:
+      tags:
+        - Comunicazioni
+      summary: Ottieni tutte le comunicazioni (Admin)
+      description: Restituisce tutte le comunicazioni per amministratori. Richiede ruolo admin.
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Comunicazioni per admin
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ComunicazioneAdmin'
+
+    post:
+      tags:
+        - Comunicazioni
+      summary: Crea nuova comunicazione (Admin)
+      description: Crea una nuova comunicazione con possibili allegati. Richiede ruolo admin.
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - titolo
+                - descrizione
+                - email
+              properties:
+                titolo:
+                  type: string
+                  example: Avviso importante
+                  description: Titolo della comunicazione
+                descrizione:
+                  type: string
+                  example: Descrizione dettagliata della comunicazione
+                  description: Descrizione
+                email:
+                  type: string
+                  format: email
+                  example: admin@streetwise.com
+                  description: Email di contatto
+                allegati:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: File allegati (max 5 file, 10MB ciascuno)
+      responses:
+        '201':
+          description: Comunicazione creata con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Comunicazione creata con successo
+                  data:
+                    $ref: '#/components/schemas/ComunicazioneAdmin'
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+      description: JWT token passato tramite cookie HTTP-only
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+          description: ID MongoDB dell'utente
+        email:
+          type: string
+          format: email
+          example: admin@streetwise.com
+          description: Email dell'utente
+        role:
+          type: string
+          enum: [admin, delegato]
+          example: admin
+          description: Ruolo dell'utente
+
+    Citta:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+          description: ID MongoDB
+        nome:
+          type: string
+          example: Trento
+          description: Nome della città
+        coordinate:
+          type: object
+          description: Coordinate geografiche della città
+
+    Strada:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+          description: ID MongoDB
+        nome:
+          type: string
+          example: Via Roma
+          description: Nome della strada
+        citta:
+          type: number
+          example: 1
+          description: ID numerico della città
+        coordinate:
+          type: array
+          items:
+            type: object
+          description: Array di coordinate che definiscono il percorso
+
+    Tratto:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+          description: ID MongoDB
+        nome:
+          type: string
+          example: Tratto Via Roma - Piazza Duomo
+          description: Nome del tratto
+        citta:
+          type: number
+          example: 1
+          description: ID numerico della città
+        coordinate:
+          type: array
+          items:
+            type: object
+          description: Coordinate del tratto stradale
+
+    Giunto:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+          description: ID MongoDB
+        nome:
+          type: string
+          example: Incrocio Via Roma - Via Verdi
+          description: Nome del giunto/incrocio
+        citta:
+          type: number
+          example: 1
+          description: ID numerico della città
+        coordinate:
+          type: object
+          description: Coordinate dell'incrocio
+
+    TrafficRoute:
+      type: object
+      properties:
+        routeName:
+          type: string
+          example: Via Brennero da Sud a Nord
+          description: Nome della tratta
+        from:
+          type: string
+          example: Via Brennero Sud
+          description: Punto di partenza
+        to:
+          type: string
+          example: Via Brennero Nord
+          description: Punto di arrivo
+        fromCoords:
+          type: array
+          items:
+            type: number
+          example: [11.123, 46.077]
+          description: Coordinate punto partenza
+        toCoords:
+          type: array
+          items:
+            type: number
+          example: [11.107, 46.114]
+          description: Coordinate punto arrivo
+        coordinates:
+          type: array
+          items:
+            type: object
+          description: Array completo coordinate del percorso
+        duration:
+          type: number
+          example: 8
+          description: Durata in minuti
+        distance:
+          type: number
+          example: 3.2
+          description: Distanza in chilometri
+        avgSpeed:
+          type: number
+          example: 24
+          description: Velocità media in km/h
+        trafficLevel:
+          type: string
+          enum: [green, yellow, red]
+          example: yellow
+          description: Livello di traffico (green=scorrevole, yellow=moderato, red=intenso)
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-06-10T14:30:00.000Z"
+          description: Timestamp rilevazione
+
+    Incidente:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+          description: ID MongoDB
+        descrizione:
+          type: string
+          example: Incidente stradale con 2 veicoli coinvolti
+          description: Descrizione dell'incidente
+        citta:
+          type: number
+          example: 1
+          description: ID numerico della città
+        coordinate:
+          type: object
+          description: Coordinate dell'incidente
+        dataOra:
+          type: string
+          format: date-time
+          example: "2024-06-10T14:30:00.000Z"
+          description: Data e ora dell'incidente
+        gravita:
+          type: string
+          enum: [bassa, media, alta]
+          example: media
+          description: Gravità dell'incidente
+
+    Fermata:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+          description: ID MongoDB
+        nome:
+          type: string
+          example: Fermata Stazione FS
+          description: Nome della fermata
+        citta:
+          type: number
+          example: 1
+          description: ID numerico della città
+        coordinate:
+          type: object
+          description: Coordinate della fermata
+        linee:
+          type: array
+          items:
+            type: string
+          description: Array delle linee che servono la fermata
+
+    Corsa:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+          description: ID MongoDB
+        linea:
+          type: string
+          example: A
+          description: Codice della linea
+        citta:
+          type: number
+          example: 1
+          description: ID numerico della città
+        ora_partenza:
+          type: string
+          example: "08:30"
+          description: Ora di partenza (formato HH:MM)
+        fermata_partenza:
+          type: string
+          example: Stazione FS
+          description: Nome fermata di partenza
+        fermata_arrivo:
+          type: string
+          example: Piazza Duomo
+          description: Nome fermata di arrivo
+        giorni:
+          type: array
+          items:
+            type: string
+          description: Giorni della settimana in cui opera
+    Segnalazione:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+          description: ID MongoDB
+        titolo:
+          type: string
+          example: Buca pericolosa in Via Roma
+          description: Titolo della segnalazione
+        descrizione:
+          type: string
+          example: Grande buca sul lato destro della carreggiata
+          description: Descrizione dettagliata
+        email:
+          type: string
+          example: cittadino@email.com
+          description: Email del segnalatore
+        coord:
+          type: object
+          properties:
+            x:
+              type: number
+              example: 11.121
+              description: Longitudine
+            y:
+              type: number
+              example: 46.067
+              description: Latitudine
+        stato:
+          type: string
+          enum: [aperta, in_lavorazione, chiusa]
+          default: aperta
+          description: Stato attuale della segnalazione
+        dataCreazione:
+          type: string
+          format: date-time
+          example: 2024-06-10T14:30:00.000Z
+          description: Data di creazione della segnalazione
+
+    ComunicazionePubblica:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+          description: ID MongoDB
+        titolo:
+          type: string
+          example: Avviso importante per i cittadini
+          description: Titolo della comunicazione
+        descrizione:
+          type: string
+          example: Informazioni dettagliate sulla comunicazione
+          description: Descrizione completa
+        email:
+          type: string
+          example: info@comune.it
+          description: Email di contatto
+        dataCreazione:
+          type: string
+          format: date-time
+          example: 2024-06-10T14:30:00.000Z
+          description: Data di creazione
+        allegati:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllegatoPubblico'
+          description: File allegati alla comunicazione
+
+    ComunicazioneAdmin:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 507f1f77bcf86cd799439011
+          description: ID MongoDB
+        titolo:
+          type: string
+          example: Comunicazione amministrativa
+          description: Titolo della comunicazione
+        descrizione:
+          type: string
+          example: Descrizione dettagliata per amministratori
+          description: Descrizione completa
+        email:
+          type: string
+          example: admin@streetwise.com
+          description: Email di contatto
+        dataCreazione:
+          type: string
+          format: date-time
+          example: 2024-06-10T14:30:00.000Z
+          description: Data di creazione
+        allegati:
+          type: array
+          items:
+            $ref: '#/components/schemas/AllegatoAdmin'
+          description: File allegati con metadati
+
+    AllegatoPubblico:
+      type: object
+      properties:
+        nomeFile:
+          type: string
+          example: documento.pdf
+          description: Nome del file
+        contentType:
+          type: string
+          example: application/pdf
+          description: Tipo MIME del file
+        dati:
+          type: object
+          properties:
+            base64:
+              type: string
+              example: JVBERi0xLjQKJe...
+              description: File codificato in base64
+
+    AllegatoAdmin:
+      type: object
+      properties:
+        nomeFile:
+          type: string
+          example: rapporto.docx
+          description: Nome del file
+        contentType:
+          type: string
+          example: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+          description: Tipo MIME
+        dimensione:
+          type: number
+          example: 1024000
+          description: Dimensione in bytes
+
+paths:
+  # Segnalazioni
+  /api/segnalazioni:
+    get:
+      tags:
+        - Segnalazioni
+      summary: Ottieni tutte le segnalazioni
+      description: Restituisce tutte le segnalazioni ordinate per data di creazione (più recenti prime)
+      responses:
+        '200':
+          description: Lista delle segnalazioni
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Segnalazione'
+        '500':
+          description: Errore del server
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Errore del server
+
+    post:
+      tags:
+        - Segnalazioni
+      summary: Crea nuova segnalazione
+      description: Permette ai cittadini di creare una nuova segnalazione
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - titolo
+                - descrizione
+                - email
+                - coord
+              properties:
+                titolo:
+                  type: string
+                  example: Buca pericolosa in Via Roma
+                  description: Titolo della segnalazione
+                descrizione:
+                  type: string
+                  example: Grande buca sul lato destro della carreggiata che causa danni ai veicoli
+                  description: Descrizione dettagliata
+                email:
+                  type: string
+                  example: cittadino@email.com
+                  description: Email del segnalatore
+                coord:
+                  type: object
+                  required:
+                    - x
+                    - y
+                  properties:
+                    x:
+                      type: number
+                      example: 11.121
+                      description: Longitudine
+                    y:
+                      type: number
+                      example: 46.067
+                      description: Latitudine
+      responses:
+        '201':
+          description: Segnalazione creata con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Segnalazione creata con successo
+                  segnalazione:
+                    $ref: '#/components/schemas/Segnalazione'
+        '400':
+          description: Dati mancanti
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Tutti i campi sono obbligatori (titolo, descrizione, email, coord)
+
+  /api/segnalazioni/{id}:
+    put:
+      tags:
+        - Segnalazioni
+      summary: Aggiorna stato segnalazione
+      description: Permette di aggiornare lo stato di una segnalazione. Generalmente riservato agli admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID MongoDB della segnalazione
+          schema:
+            type: string
+            example: 507f1f77bcf86cd799439011
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - stato
+              properties:
+                stato:
+                  type: string
+                  enum: [aperta, in_lavorazione, chiusa]
+                  description: Nuovo stato della segnalazione
+      responses:
+        '200':
+          description: Stato aggiornato con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Stato segnalazione aggiornato
+                  segnalazione:
+                    $ref: '#/components/schemas/Segnalazione'
+        '400':
+          description: Stato non valido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Lo stato deve essere aperta, in_lavorazione o chiusa
+        '404':
+          description: Segnalazione non trovata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Segnalazione non trovata
+
+  # Comunicazioni
+  /api/comunicazioni/recenti:
+    get:
+      tags:
+        - Comunicazioni
+      summary: Ottieni comunicazioni recenti
+      description: Restituisce le comunicazioni più recenti per utenti non autenticati
+      parameters:
+        - name: limite
+          in: query
+          required: false
+          description: Numero massimo di comunicazioni da restituire
+          schema:
+            type: number
+            default: 10
+            example: 10
+      responses:
+        '200':
+          description: Lista delle comunicazioni recenti
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ComunicazionePubblica'
+
+  /api/comunicazioni:
+    get:
+      tags:
+        - Comunicazioni
+      summary: Ottieni tutte le comunicazioni
+      description: Restituisce tutte le comunicazioni ordinate per data di creazione (più recenti prime)
+      responses:
+        '200':
+          description: Lista delle comunicazioni
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ComunicazionePubblica'
+
+  /api/comunicazioni/{id}:
+    get:
+      tags:
+        - Comunicazioni
+      summary: Ottieni comunicazione specifica
+      description: Restituisce i dettagli di una comunicazione specifica
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID MongoDB della comunicazione
+          schema:
+            type: string
+            example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Dettagli della comunicazione
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/ComunicazionePubblica'
+        '404':
+          description: Comunicazione non trovata
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Comunicazione non trovata
+
+  # Gestione Admin Comunicazioni
+  /api/comunicazioni/admin:
+    get:
+      tags:
+        - Comunicazioni Admin
+      summary: Ottieni tutte le comunicazioni (Admin)
+      description: Restituisce tutte le comunicazioni per amministratori. Richiede ruolo admin
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Lista delle comunicazioni admin
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ComunicazioneAdmin'
+        '302':
+          description: Reindirizzamento per mancanza di autorizzazione
+          headers:
+            Location:
+              schema:
+                type: string
+                example: /
+
+    post:
+      tags:
+        - Comunicazioni Admin
+      summary: Crea nuova comunicazione (Admin)
+      description: Crea una nuova comunicazione con possibili allegati. Richiede ruolo admin
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - titolo
+                - descrizione
+                - email
+              properties:
+                titolo:
+                  type: string
+                  example: Avviso importante
+                  description: Titolo della comunicazione
+                descrizione:
+                  type: string
+                  example: Descrizione dettagliata della comunicazione
+                  description: Descrizione
+                email:
+                  type: string
+                  example: admin@streetwise.com
+                  description: Email di contatto
+                allegati:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: File allegati (max 5 file, 10MB ciascuno)
+      responses:
+        '201':
+          description: Comunicazione creata con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Comunicazione creata con successo
+                  data:
+                    $ref: '#/components/schemas/ComunicazioneAdmin'
+
+  /api/comunicazioni/admin/{id}:
+    put:
+      tags:
+        - Comunicazioni Admin
+      summary: Modifica comunicazione (Admin)
+      description: Modifica una comunicazione esistente. Richiede ruolo admin
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID MongoDB della comunicazione
+          schema:
+            type: string
+            example: 507f1f77bcf86cd799439011
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - titolo
+                - descrizione
+                - email
+              properties:
+                titolo:
+                  type: string
+                  example: Titolo modificato
+                  description: Nuovo titolo
+                descrizione:
+                  type: string
+                  example: Nuova descrizione
+                  description: Nuova descrizione
+                email:
+                  type: string
+                  example: nuovo@email.com
+                  description: Nuova email
+                mantieni_allegati:
+                  type: string
+                  example: "true"
+                  description: Mantieni allegati esistenti
+                allegati:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: File allegati (max 5 file, 10MB ciascuno)
+      responses:
+        '200':
+          description: Comunicazione aggiornata con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Comunicazione aggiornata con successo
+                  data:
+                    $ref: '#/components/schemas/ComunicazioneAdmin'
+
+    delete:
+      tags:
+        - Comunicazioni Admin
+      summary: Elimina comunicazione (Admin)
+      description: Elimina una comunicazione dal sistema. Richiede ruolo admin
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID MongoDB della comunicazione
+          schema:
+            type: string
+            example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Comunicazione eliminata con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Comunicazione eliminata con successo
+
+  /api/comunicazioni/admin/{id}/allegato/{index}:
+    get:
+      tags:
+        - Comunicazioni Admin
+      summary: Scarica allegato (Admin)
+      description: Scarica un allegato specifico. Richiede ruolo admin
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID MongoDB della comunicazione
+          schema:
+            type: string
+            example: 507f1f77bcf86cd799439011
+        - name: index
+          in: path
+          required: true
+          description: Indice dell'allegato
+          schema:
+            type: number
+            example: 0
+      responses:
+        '200':
+          description: File allegato
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+                example: attachment; filename="documento.pdf"
+
+  # Gestione Delegati Comunicazioni
+  /api/comunicazioni/delegati:
+    get:
+      tags:
+        - Comunicazioni Delegati
+      summary: Ottieni tutte le comunicazioni (Delegati)
+      description: Restituisce tutte le comunicazioni per delegati. Richiede ruolo delegato
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Lista delle comunicazioni delegati
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ComunicazioneAdmin'
+
+    post:
+      tags:
+        - Comunicazioni Delegati
+      summary: Crea nuova comunicazione (Delegati)
+      description: Crea una nuova comunicazione con possibili allegati. Richiede ruolo delegato
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - titolo
+                - descrizione
+                - email
+              properties:
+                titolo:
+                  type: string
+                  example: Comunicazione delegato
+                  description: Titolo della comunicazione
+                descrizione:
+                  type: string
+                  example: Descrizione della comunicazione
+                  description: Descrizione
+                email:
+                  type: string
+                  example: delegato@streetwise.com
+                  description: Email di contatto
+                allegati:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: File allegati (max 5 file, 10MB ciascuno)
+      responses:
+        '201':
+          description: Comunicazione creata con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Comunicazione creata con successo
+                  data:
+                    $ref: '#/components/schemas/ComunicazioneAdmin'
+
+  /api/comunicazioni/delegati/{id}:
+    put:
+      tags:
+        - Comunicazioni Delegati
+      summary: Modifica comunicazione (Delegati)
+      description: Modifica una comunicazione esistente. Richiede ruolo delegato
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID MongoDB della comunicazione
+          schema:
+            type: string
+            example: 507f1f77bcf86cd799439011
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - titolo
+                - descrizione
+                - email
+              properties:
+                titolo:
+                  type: string
+                  example: Titolo modificato
+                  description: Nuovo titolo
+                descrizione:
+                  type: string
+                  example: Nuova descrizione
+                  description: Nuova descrizione
+                email:
+                  type: string
+                  example: nuovo@email.com
+                  description: Nuova email
+                mantieni_allegati:
+                  type: string
+                  example: "true"
+                  description: Mantieni allegati esistenti
+                allegati:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: File allegati (max 5 file, 10MB ciascuno)
+      responses:
+        '200':
+          description: Comunicazione aggiornata con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Comunicazione aggiornata con successo
+                  data:
+                    $ref: '#/components/schemas/ComunicazioneAdmin'
+
+    delete:
+      tags:
+        - Comunicazioni Delegati
+      summary: Elimina comunicazione (Delegati)
+      description: Elimina una comunicazione dal sistema. Richiede ruolo delegato
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID MongoDB della comunicazione
+          schema:
+            type: string
+            example: 507f1f77bcf86cd799439011
+      responses:
+        '200':
+          description: Comunicazione eliminata con successo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Comunicazione eliminata con successo
+
+  /api/comunicazioni/delegati/{id}/allegato/{index}:
+    get:
+      tags:
+        - Comunicazioni Delegati
+      summary: Scarica allegato (Delegati)
+      description: Scarica un allegato specifico. Richiede ruolo delegato
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID MongoDB della comunicazione
+          schema:
+            type: string
+            example: 507f1f77bcf86cd799439011
+        - name: index
+          in: path
+          required: true
+          description: Indice dell'allegato
+          schema:
+            type: number
+            example: 0
+      responses:
+        '200':
+          description: File allegato
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+          headers:
+            Content-Disposition:
+              schema:
+                type: string
+                example: attachment; filename="documento.pdf"
