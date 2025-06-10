@@ -50,13 +50,7 @@ StreetWise è una piattaforma web per la gestione della mobilità urbana, pensat
    npm install
    node index.js
    ```
-4. Installa e avvia il **client**:
-   ```bash
-   cd ../client
-   npm install
-   node app.js
-   ```
-5. Di default è possibile accedere all’applicazione via browser su `http://localhost:3000`.
+4. Di default è possibile accedere all’applicazione via browser in locale su `https://localhost:3443/` oppure tramite Render su `https://streetwise.onrender.com/`.
 
 ---
 
@@ -66,63 +60,103 @@ StreetWise è una piattaforma web per la gestione della mobilità urbana, pensat
 streetwise/
 ├── .gitattributes
 ├── .gitignore
-├── client/                                 # Frontend (EJS, CSS, JS)
-│   ├── .gitignore
-│   ├── app.js                              # Punto di ingresso client
-│   ├── package-lock.json
-│   ├── package.json                        # Dipendenze front-end
-│   ├── public/                             # Risorse statiche
-│   │   ├── css/
-│   │   │   ├── admin.css                   # Stili per il pannello admin
-│   │   │   └── style.css
-│   │   ├── img/                            # Icone e favicon per PWA/mobile
-│   │   │   ├── android-chrome-192x192.png
-│   │   │   ├── android-chrome-512x512.png
-│   │   │   ├── apple-touch-icon.png
-│   │   │   ├── favicon-16x16.png
-│   │   │   ├── favicon-32x32.png
-│   │   │   ├── favicon.ico
-│   │   │   └── site.webmanifest
-│   │   └── js/                             # Script lato client
-│   │       ├── auth/                       # Modulo autenticazione separato
-│   │       │   └── login.js                # Logica login (separata)
-│   │       ├── config.js
-│   │       └── map/
-│   │           ├── canvas-overlay.js
-│   │           ├── draw-tratti.js
-│   │           ├── main.js
-│   │           ├── map-loader.js
-│   │           └── utils.js
-│   ├── routes/
-│   │   └── index.js
-│   └── views/
-│       ├── admin.ejs                       # Vista pannello amministrativo
-│       └── index.ejs
 ├── package-lock.json
 ├── package.json
 ├── README.md
-└── server/                                 # Backend (Express.js)
+└── server/                                 # Backend Express.js
     ├── .gitignore
     ├── controllers/                        # Logica e middleware
     │   ├── authcontroller.js
     │   └── authMiddleware.js
-    ├── incidenti.json
     ├── index.js                            # Punto di ingresso server
-    ├── models/
+    ├── models/                             # Modelli dati
+    │   ├── cittaData.js
+    │   ├── comunicazioniData.js
+    │   ├── corseData.js
+    │   ├── fermateData.js
     │   ├── giuntiData.js
     │   ├── incidentiData.js
+    │   ├── segnalazioniData.js
     │   ├── stradeData.js
     │   ├── trattiData.js
     │   └── user.js
     ├── package-lock.json
     ├── package.json
-    └── routes/                             # API REST
-        ├── giunti.js
-        ├── incidenti.js
-        ├── routeLogin.js
-        ├── strade.js
-        ├── tratti.js
-        └── users.js                        # Nuove API per gestione utenti
+    ├── public/                             # Risorse statiche frontend
+    │   ├── css/                            # Fogli di stile
+    │   │   ├── admin.css
+    │   │   ├── carousel.css
+    │   │   ├── comunicazioni-admin.css
+    │   │   ├── comunicazioni.css
+    │   │   ├── error.css
+    │   │   ├── footer.css
+    │   │   ├── map.css
+    │   │   ├── navbar.css
+    │   │   ├── segnalazioni.css
+    │   │   ├── sidebar.css
+    │   │   ├── style.css
+    │   │   └── toast.css
+    │   ├── img/                            # Icone e favicon per PWA
+    │   │   ├── android-chrome-192x192.png
+    │   │   ├── android-chrome-512x512.png
+    │   │   ├── apple-touch-icon.png
+    │   │   ├── favicon-16x16.png
+    │   │   ├── favicon-32x32.png
+    │   │   ├── favicon.ico
+    │   │   └── site.webmanifest
+    │   └── js/                             # Script 
+    │       ├── admin.js
+    │       ├── auth/                       # Modulo autenticazione
+    │       │   └── login.js
+    │       ├── carousel.js
+    │       ├── comunicazioni-admin.js
+    │       ├── comunicazioni-delegati.js
+    │       ├── map/                        # Funzionalità mappa
+    │       │   ├── canvas-overlay.js
+    │       │   ├── draw-tratti.js
+    │       │   ├── leaflet-heat.js
+    │       │   ├── main.js
+    │       │   ├── map-loader.js
+    │       │   ├── map-traffico.js
+    │       │   ├── map-trasporti.js
+    │       │   └── utils.js
+    │       ├── navbar.js
+    │       ├── segnalazioni.js
+    │       └── toast.js
+    ├── routes/                             # API REST
+    │   ├── citta.js
+    │   ├── comunicazioni.js
+    │   ├── corse.js
+    │   ├── fermate.js
+    │   ├── giunti.js
+    │   ├── incidenti.js
+    │   ├── index.js
+    │   ├── routeLogin.js
+    │   ├── segnalazioni.js
+    │   ├── strade.js
+    │   ├── traffico.js
+    │   ├── tratti.js
+    │   └── users.js
+    └── views/                              # Template EJS
+        ├── admin/                          # Viste pannello admin
+        │   └── index.ejs
+        ├── base/
+        │   └── index.ejs
+        ├── dashboard/                      # Viste dashboard
+        │   └── index.ejs
+        ├── delegati/                       # Viste per delegati
+        │   └── index.ejs
+        ├── error.ejs
+        ├── layouts/                        # Layout base
+        │   └── default.ejs
+        ├── partials/                       # Componenti riutilizzabili
+        │   ├── comunicazioni.ejs
+        │   ├── footer.ejs
+        │   ├── map.ejs
+        │   ├── navbar.ejs
+        │   └── toast.ejs
+        └── segnala/                        # Viste segnalazioni
+            └── index.ejs
 ```
 
 ---
