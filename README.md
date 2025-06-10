@@ -37,6 +37,33 @@ StreetWise è una piattaforma web per la gestione della mobilità urbana, pensat
 - npm (incluso in Node.js)
 - Browser (Chrome, Firefox, Edge, Safari)
 
+Variabili d'ambiente (.env)
+Crea un file .env nella cartella server del progetto con il seguente contenuto
+```
+CLIENT_URL_HTTPS=https://localhost:3443
+PORT_HTTPS=3443
+
+CLIENT_URL_HTTP=http://localhost:3000
+PORT_HTTP=3000
+
+# Database
+MONGO_URI=<database>
+DB_NAME=<nome_db>
+
+# Ambiente e sicurezza
+NODE_ENV=production
+SESSION_SECRET=<una stringa segreta>
+JWT_SECRET=<una lunga chiave segreta>
+
+# API esterne
+OPENROUTE_API_KEY=<la tua API key>
+```
+
+Per eseguire il progetto in HTTPS in locale, crea i certificati SSL all'interno della directory server/ssl:
+```
+openssl req -x509 -newkey rsa:2048 -nodes -keyout server/ssl/key.pem -out server/ssl/cert.pem -days 365
+```
+
 ---
 
 ## Installazione e avvio
