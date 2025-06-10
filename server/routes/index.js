@@ -37,7 +37,7 @@ router.get('/logout', (req, res) => {
             req.session.toast = { message: "Errore Log-out, riprova", tipo: "error" };
             return res.status(500).send('Errore logout');
         }
-        res.redirect(process.env.CLIENT_URL_HTTPS);      // Reindirizza alla pagina base
+        res.redirect('/');      // Reindirizza alla pagina base
     });
 });
 
