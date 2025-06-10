@@ -2,27 +2,33 @@
 async function loadCitta(map, nomeCitta) {
   try{
     fetchDataField('citta', 'nome', nomeCitta).then(citta => {
-        if (!citta) {
-            showToast("La città non è presente nei DataBase di StreetWise", tipo='warning', lifeSpan= 3000);
-            return;
-        }
+      if (!citta) {
+          showToast("La città non è presente nei DataBase di StreetWise", tipo='warning', lifeSpan= 3000);
+          return;
+      }
 
-        const center = convertToWGS84(citta.pos.x, citta.pos.y);
-        const bounds = L.latLngBounds(
-            convertToWGS84(citta.bounds.right, citta.bounds.up),
-            convertToWGS84(citta.bounds.left, citta.bounds.down)
-        )
+      const center = convertToWGS84(citta.pos.x, citta.pos.y);
+      const bounds = L.latLngBounds(
+          convertToWGS84(citta.bounds.right, citta.bounds.up),
+          convertToWGS84(citta.bounds.left, citta.bounds.down)
+      )
 
-        map.setView(center, parseInt(citta.zoom.min)+2);
-        map.setMinZoom(parseInt(citta.zoom.min));
-        map.setMaxZoom(parseInt(citta.zoom.max));
-        map.setMaxBounds(bounds, maxBoundsViscosity=0.9);
+      map.setView(center, parseInt(citta.zoom.min)+2);
+      map.setMinZoom(parseInt(citta.zoom.min));
+      map.setMaxZoom(parseInt(citta.zoom.max));
+      map.setMaxBounds(bounds, maxBoundsViscosity=0.9);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
 
-        loadAllMapData(map, citta.id);
+      // Carica tutti i dati della mappa inclusi i trasportiAdd commentMore actions
+      loadAllMapData(map, citta.id);
+      
+      // Carica specificamente i dati dei trasporti
+      if (typeof window.loadTrasportiData === 'function') {
+        loadTrasportiData(map, citta.id);
+      }
     });
   } catch(err) {
     showToast(message=err, tipo='error');
